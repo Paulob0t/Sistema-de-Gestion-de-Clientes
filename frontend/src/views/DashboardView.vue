@@ -21,12 +21,12 @@ function handleLogout() {
     <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20">
-            CW
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20">
+            <i class="pi pi-bolt text-lg"></i>
           </div>
           <div>
-            <h1 class="text-lg font-bold text-slate-900 leading-tight">CONLINEWEB CRM</h1>
-            <p class="text-xs text-slate-500">Gestión de Clientes & Servicios</p>
+            <h1 class="text-lg font-bold text-slate-900 leading-tight">NEXUS<span class="text-blue-600">CORE</span></h1>
+            <p class="text-xs text-slate-500">Enterprise Cloud & CRM Suite</p>
           </div>
         </div>
 
