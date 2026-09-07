@@ -1,0 +1,500 @@
+/**
+ * ConlineWeb Admin — DataTables: diseño y acomodo
+ * Complementa dataTables.bootstrap4; no altera comportamiento JS.
+ * v20250714
+ */
+
+:root {
+    --adm-dt-brand: #000147;
+    --adm-dt-brand-soft: #eef0ff;
+    --adm-dt-border: #e2e8f0;
+    --adm-dt-muted: #64748b;
+    --adm-dt-head: #fafbff;
+    --adm-dt-foot: #f8fafc;
+}
+
+/* ── Contenedor principal ── */
+.legacy-touch .modern-table {
+    border-radius: 20px;
+    border: 1px solid var(--adm-dt-border);
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
+}
+
+.legacy-touch .modern-table > .dataTables_wrapper {
+    width: 100%;
+}
+
+/* ── Barra superior: registros + búsqueda ── */
+.legacy-touch .modern-table .adm-dt-toolbar,
+.legacy-touch .modern-table .dataTables_wrapper > .row:first-child {
+    margin: 0 !important;
+    padding: 1rem 1.25rem 0.85rem;
+    background: linear-gradient(180deg, #fafbff 0%, #fff 100%);
+    border-bottom: 1px solid var(--adm-dt-border);
+    gap: 0.75rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.legacy-touch .modern-table .dataTables_wrapper > .row:first-child > [class*="col-"] {
+    flex: 1 1 auto;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.legacy-touch .modern-table .dataTables_wrapper > .row:first-child > [class*="col-"]:last-child {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.legacy-touch .modern-table .dataTables_length,
+.legacy-touch .modern-table .dataTables_filter {
+    margin-bottom: 0;
+    float: none !important;
+}
+
+.legacy-touch .modern-table .dataTables_length label,
+.legacy-touch .modern-table .dataTables_filter label {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem 0.65rem;
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--adm-dt-muted);
+}
+
+.legacy-touch .modern-table .dataTables_length select {
+    width: auto !important;
+    min-width: 72px;
+    margin: 0 !important;
+    border: 1.5px solid var(--adm-dt-border);
+    border-radius: 10px;
+    padding: 0.45rem 2rem 0.45rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #0f172a;
+    background-color: #fff;
+    background-position: right 0.55rem center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.legacy-touch .modern-table .dataTables_filter {
+    text-align: right;
+    width: auto;
+    margin-left: auto;
+}
+
+.legacy-touch .modern-table .dataTables_filter label {
+    justify-content: flex-end;
+    width: auto;
+    max-width: 100%;
+}
+
+.legacy-touch .modern-table .dataTables_filter input {
+    width: 280px !important;
+    max-width: 100%;
+    flex: 0 1 280px;
+    margin: 0 !important;
+    border: 1.5px solid var(--adm-dt-border);
+    border-radius: 12px;
+    padding: 0.55rem 0.9rem 0.55rem 2.35rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #0f172a;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242 1.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 0.8rem center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.legacy-touch .modern-table .dataTables_length select:focus,
+.legacy-touch .modern-table .dataTables_filter input:focus {
+    outline: none;
+    border-color: var(--adm-dt-brand);
+    box-shadow: 0 0 0 3px rgba(0, 1, 71, 0.08);
+}
+
+/* ── Zona de tabla con scroll horizontal ── */
+.legacy-touch .modern-table .dataTables_wrapper > .row:nth-child(2) {
+    margin: 0 !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.legacy-touch .modern-table .dataTables_wrapper > .row:nth-child(2) > .col-sm-12 {
+    padding: 0;
+}
+
+.legacy-touch .modern-table table.dataTable {
+    width: 100% !important;
+    margin: 0 !important;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.legacy-touch .modern-table table.dataTable thead th {
+    background: var(--adm-dt-head) !important;
+    color: #0f172a;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.95rem 1rem;
+    border-bottom: 1px solid var(--adm-dt-border) !important;
+    border-top: none !important;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.legacy-touch .modern-table table.dataTable thead th i {
+    margin-right: 0.35rem;
+    color: var(--adm-dt-brand);
+    opacity: 0.85;
+}
+
+.legacy-touch .modern-table table.dataTable tbody td {
+    padding: 0.85rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #0f172a;
+    vertical-align: middle;
+    border-top: 1px solid #f1f5f9 !important;
+    line-height: 1.45;
+}
+
+.legacy-touch .modern-table table.dataTable tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.legacy-touch .modern-table table.dataTable tbody tr:hover {
+    background: #fefefe;
+}
+
+.legacy-touch .modern-table table.dataTable tbody tr:nth-child(even) {
+    background: #fcfdff;
+}
+
+.legacy-touch .modern-table table.dataTable tbody tr:nth-child(even):hover {
+    background: #fefefe;
+}
+
+/* Columna de acciones */
+.legacy-touch .modern-table table.dataTable tbody td:last-child {
+    min-width: 220px;
+    max-width: 340px;
+}
+
+/* ── Botones de acción en filas (clientes, etc.) ── */
+.legacy-touch .adm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.legacy-touch .adm-act {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 11px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.legacy-touch button.adm-act {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: none;
+}
+
+.legacy-touch a.adm-act {
+    text-decoration: none;
+}
+
+.legacy-touch a.adm-act.adm-act--view { color: #000147; }
+.legacy-touch a.adm-act.adm-act--view:hover { color: #fff; }
+.legacy-touch a.adm-act.adm-act--success { color: #047857; }
+.legacy-touch a.adm-act.adm-act--success:hover { color: #fff; }
+.legacy-touch a.adm-act.adm-act--danger { color: #b91c1c; }
+.legacy-touch a.adm-act.adm-act--danger:hover { color: #fff; }
+.legacy-touch a.adm-act.adm-act--info { color: #1d4ed8; }
+.legacy-touch a.adm-act.adm-act--info:hover { color: #fff; }
+.legacy-touch a.adm-act.adm-act--warn { color: #b45309; }
+.legacy-touch a.adm-act.adm-act--warn:hover { color: #fff; }
+
+.legacy-touch .adm-act i {
+    margin-right: 0 !important;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.legacy-touch .adm-act:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+.legacy-touch .adm-act:active {
+    transform: translateY(0);
+}
+
+.legacy-touch .adm-act--view {
+    background: #eef0ff;
+    color: #000147;
+    border-color: #c7d2fe;
+}
+
+.legacy-touch .adm-act--view:hover {
+    background: #000147;
+    color: #fff;
+    border-color: #000147;
+}
+
+.legacy-touch .adm-act--danger {
+    background: #fef2f2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.legacy-touch .adm-act--danger:hover {
+    background: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+}
+
+.legacy-touch .adm-act--success {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+}
+
+.legacy-touch .adm-act--success:hover {
+    background: #10b981;
+    color: #fff;
+    border-color: #10b981;
+}
+
+.legacy-touch .adm-act--info {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+.legacy-touch .adm-act--info:hover {
+    background: #3b82f6;
+    color: #fff;
+    border-color: #3b82f6;
+}
+
+.legacy-touch .adm-act--warn {
+    background: #fffbeb;
+    color: #b45309;
+    border-color: #fcd34d;
+}
+
+.legacy-touch .adm-act--warn:hover {
+    background: #f59e0b;
+    color: #fff;
+    border-color: #f59e0b;
+}
+
+.legacy-touch .adm-act--hosting {
+    background: #f5f3ff;
+    color: #6d28d9;
+    border-color: #ddd6fe;
+}
+
+.legacy-touch .adm-act--hosting:hover {
+    background: #7c3aed;
+    color: #fff;
+    border-color: #7c3aed;
+}
+
+/* ── Ordenamiento ── */
+.legacy-touch .modern-table table.dataTable thead .sorting,
+.legacy-touch .modern-table table.dataTable thead .sorting_asc,
+.legacy-touch .modern-table table.dataTable thead .sorting_desc {
+    position: relative;
+    padding-right: 1.65rem !important;
+    cursor: pointer;
+}
+
+.legacy-touch .modern-table table.dataTable thead .sorting:before,
+.legacy-touch .modern-table table.dataTable thead .sorting:after,
+.legacy-touch .modern-table table.dataTable thead .sorting_asc:before,
+.legacy-touch .modern-table table.dataTable thead .sorting_asc:after,
+.legacy-touch .modern-table table.dataTable thead .sorting_desc:before,
+.legacy-touch .modern-table table.dataTable thead .sorting_desc:after {
+    right: 0.65rem;
+    opacity: 0.35;
+    font-size: 0.65rem;
+}
+
+.legacy-touch .modern-table table.dataTable thead .sorting_asc:after,
+.legacy-touch .modern-table table.dataTable thead .sorting_desc:after {
+    opacity: 1;
+    color: var(--adm-dt-brand);
+}
+
+/* ── Pie: info + paginación ── */
+.legacy-touch .modern-table .adm-dt-footer,
+.legacy-touch .modern-table .dataTables_wrapper > .row:last-child {
+    margin: 0 !important;
+    padding: 0.85rem 1.25rem;
+    background: var(--adm-dt-foot);
+    border-top: 1px solid var(--adm-dt-border);
+    gap: 0.75rem;
+}
+
+.legacy-touch .modern-table .dataTables_info {
+    padding: 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--adm-dt-muted);
+}
+
+.legacy-touch .modern-table .dataTables_paginate {
+    padding: 0;
+    text-align: right;
+}
+
+.legacy-touch .modern-table .dataTables_paginate .pagination {
+    margin: 0;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.legacy-touch .modern-table .dataTables_paginate .page-item .page-link {
+    border: 1px solid var(--adm-dt-border);
+    border-radius: 10px !important;
+    margin: 0;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #334155;
+    background: #fff;
+    line-height: 1.2;
+    transition: all 0.15s ease;
+}
+
+.legacy-touch .modern-table .dataTables_paginate .page-item.active .page-link {
+    background: var(--adm-dt-brand);
+    border-color: var(--adm-dt-brand);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 1, 71, 0.18);
+}
+
+.legacy-touch .modern-table .dataTables_paginate .page-item .page-link:hover {
+    background: var(--adm-dt-brand-soft);
+    border-color: #c7d2fe;
+    color: var(--adm-dt-brand);
+}
+
+.legacy-touch .modern-table .dataTables_paginate .page-item.disabled .page-link {
+    background: #f1f5f9;
+    color: #94a3b8;
+    border-color: var(--adm-dt-border);
+}
+
+/* Sin datos */
+.legacy-touch .modern-table .dataTables_empty {
+    padding: 2rem 1rem !important;
+    text-align: center;
+    color: var(--adm-dt-muted);
+    font-weight: 500;
+}
+
+/* Processing */
+.legacy-touch .dataTables_processing {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid var(--adm-dt-border) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    color: var(--adm-dt-brand) !important;
+    font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 991.98px) {
+    .legacy-touch .modern-table .dataTables_wrapper > .row:first-child > [class*="col-"]:last-child {
+        justify-content: stretch;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .legacy-touch .modern-table .dataTables_filter {
+        text-align: left;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .legacy-touch .modern-table .dataTables_filter label {
+        justify-content: flex-start;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .legacy-touch .modern-table .dataTables_filter input {
+        width: 100% !important;
+        max-width: none;
+        flex: 1 1 100%;
+    }
+
+    .legacy-touch .modern-table .dataTables_paginate {
+        text-align: center;
+    }
+
+    .legacy-touch .modern-table .dataTables_paginate .pagination {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .legacy-touch .modern-table .adm-dt-toolbar,
+    .legacy-touch .modern-table .dataTables_wrapper > .row:first-child,
+    .legacy-touch .modern-table .adm-dt-footer,
+    .legacy-touch .modern-table .dataTables_wrapper > .row:last-child {
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+    }
+
+    .legacy-touch .modern-table table.dataTable thead th,
+    .legacy-touch .modern-table table.dataTable tbody td {
+        padding: 0.75rem 0.65rem;
+        font-size: 0.8125rem;
+    }
+
+    .legacy-touch .modern-table table.dataTable tbody td:last-child {
+        min-width: 140px;
+    }
+
+    .legacy-touch .modern-table .adm-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .legacy-touch .modern-table .adm-actions .adm-act {
+        width: 100%;
+        justify-content: center;
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+}

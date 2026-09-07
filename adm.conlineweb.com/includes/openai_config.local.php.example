@@ -1,0 +1,12 @@
+<?php
+/**
+ * Copiar a openai_config.local.php — SOLO desarrollo local (mock sin OpenAI).
+ * En cPanel usar openai_config.secrets.php (no este archivo).
+ */
+$__cw_host = strtolower((string) preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''));
+if ($__cw_host !== '' && preg_match('/(^|\.)conlineweb\.com$/', $__cw_host)) {
+    return;
+}
+
+define('OPENAI_DEV_MOCK', true);
+// define('OPENAI_API_KEY', 'sk-...');

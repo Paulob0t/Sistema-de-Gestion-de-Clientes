@@ -1,0 +1,12 @@
+<?php
+/**
+ * Overrides opcionales de desarrollo local — NO obligatorio.
+ * Si se sube por error a producción, no aplica (host *.conlineweb.com).
+ */
+$__cw_host = strtolower((string) preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''));
+if ($__cw_host !== '' && preg_match('/(^|\.)conlineweb\.com$/', $__cw_host)) {
+    return;
+}
+
+// define('ADM_LOCAL_CLIENTE_URL', 'http://localhost/sistemasconlineweb/cliente.conlineweb.com');
+// define('ADM_LOCAL_TOKEN_SECRET', 'mi_secreto_personalizado');

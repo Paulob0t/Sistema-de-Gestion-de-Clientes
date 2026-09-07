@@ -1,0 +1,395 @@
+/* Directorio maestro SEO/GEO — paneles claros (mismo lenguaje que seo-mexico-kpis) */
+
+.ssd-objective {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(3, 105, 161, 0.22);
+  border-radius: 12px;
+  background: #f0f9ff;
+}
+
+.ssd-objective strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0369a1;
+}
+
+.ssd-objective p {
+  margin: 0;
+  color: #0f172a;
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+.ssd-kpis .ssd-kpi-time {
+  font-size: 1.55rem !important;
+}
+
+.ssd-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+}
+
+.ssd-filter a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #334155;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.ssd-filter a:hover,
+.ssd-filter a.active {
+  color: #0f172a;
+  border-color: #0369a1;
+  background: #e0f2fe;
+}
+
+.ssd-section {
+  margin-bottom: 1.25rem;
+}
+
+.ssd-section-head {
+  align-items: flex-start !important;
+  gap: 1rem;
+}
+
+.ssd-section-head h2 {
+  margin-bottom: 0.35rem;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.ssd-meta {
+  margin: 0 0 0.45rem;
+  color: #475569;
+  font-size: 0.86rem;
+}
+
+.ssd-obj {
+  margin: 0;
+  color: #334155;
+  font-size: 0.88rem;
+}
+
+.ssd-obj i {
+  color: #0369a1;
+  margin-right: 0.25rem;
+}
+
+.ssd-badge {
+  display: inline-block;
+  margin-right: 0.45rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.ssd-badge--keep {
+  background: #d1fae5;
+  color: #047857;
+  border: 1px solid rgba(4, 120, 87, 0.25);
+}
+
+.ssd-badge--watch {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid rgba(180, 83, 9, 0.25);
+}
+
+.ssd-badge--blog {
+  background: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid rgba(126, 34, 206, 0.22);
+}
+
+.ssd-badge--weaken {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid rgba(185, 28, 28, 0.25);
+}
+
+.ssd-badge--out {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.ssd-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.ssd-stats strong {
+  color: #0f172a;
+}
+
+.ssd-missing {
+  color: #b45309;
+}
+
+.ssd-missing strong {
+  color: #b45309;
+}
+
+.ssd-table {
+  color: #0f172a;
+  background: #fff;
+}
+
+.ssd-table thead th {
+  border-top: 0;
+  border-bottom: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #f8fafc;
+}
+
+.ssd-table td {
+  border-top: 1px solid #f1f5f9;
+  vertical-align: top;
+  font-size: 0.86rem;
+  color: #0f172a;
+  background: #fff;
+}
+
+.ssd-table tbody tr:hover td {
+  background: #f8fafc;
+}
+
+.ssd-url,
+.ssd-pattern {
+  color: #0369a1;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.ssd-url:hover {
+  color: #0c4a6e;
+}
+
+.ssd-note {
+  color: #475569;
+  max-width: 32rem;
+  line-height: 1.45;
+}
+
+.ssd-expand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  max-width: 100%;
+  padding: 0.2rem 0.35rem;
+  margin: -0.2rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #0369a1;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ssd-expand:hover {
+  background: #e0f2fe;
+}
+
+.ssd-expand i {
+  font-size: 0.75rem;
+  color: #64748b;
+  transition: transform 0.15s ease;
+}
+
+.ssd-expand.is-open i {
+  transform: rotate(90deg);
+  color: #0369a1;
+}
+
+.ssd-expand-count {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 0.68rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.ssd-children-row > td {
+  padding: 0 !important;
+  background: #f8fafc !important;
+  border-top: 0 !important;
+}
+
+.ssd-children {
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.ssd-children-head {
+  margin-bottom: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.ssd-children-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  max-height: 420px;
+  overflow: auto;
+}
+
+.ssd-children-list li {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1.4fr) minmax(8rem, 0.8fr) minmax(10rem, 1fr) auto;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.ssd-children-list li.is-out {
+  background: #fffbeb;
+  border-color: rgba(180, 83, 9, 0.25);
+}
+
+.ssd-children-list a {
+  color: #0369a1;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.ssd-children-list a:hover {
+  color: #0c4a6e;
+}
+
+.ssd-child-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ssd-child-kw {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+@media (max-width: 1100px) {
+  .ssd-children-list li {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+.ssd-status {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ssd-status--ok {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.ssd-status--off {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.ssd-status--danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.ssd-row--danger td {
+  background: #fef2f2 !important;
+}
+
+.ssd-row--warn td {
+  background: #fffbeb !important;
+}
+
+.ssd-section--weaken {
+  border: 1px solid rgba(185, 28, 28, 0.28);
+}
+
+.ssd-section--watch {
+  border: 1px solid rgba(180, 83, 9, 0.22);
+}
+
+.ssd-section--blog {
+  border: 1px solid rgba(126, 34, 206, 0.18);
+}
+
+.ssd-links {
+  padding: 0.85rem 1rem 1.1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Forzar contraste dentro del panel (por si Bootstrap hereda malo) */
+.ssd-section .va-panel-head h2,
+.ssd-section .table,
+.ssd-section .table td,
+.ssd-section .table th {
+  color: inherit;
+}
+
+.ssd-section .table td:nth-child(4) {
+  color: #334155;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .ssd-table thead {
+    display: none;
+  }
+  .ssd-table tr {
+    display: block;
+    margin-bottom: 0.85rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.65rem 0.75rem;
+    background: #fff;
+  }
+  .ssd-table td {
+    display: block;
+    border: 0 !important;
+    padding: 0.2rem 0;
+    background: transparent !important;
+  }
+}

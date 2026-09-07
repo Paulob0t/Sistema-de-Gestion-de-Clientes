@@ -1,0 +1,472 @@
+/* Portal clientes — menú lateral moderno */
+:root {
+    --cw-nav-w: 272px;
+    --cw-nav-bg: #ffffff;
+    --cw-nav-ink: #0f172a;
+    --cw-nav-muted: #64748b;
+    --cw-nav-line: #eef2f7;
+    --cw-nav-primary: #000147;
+    --cw-nav-accent: #10b981;
+    --cw-nav-soft: #f1f5f9;
+}
+
+#sidebar {
+    width: var(--cw-nav-w) !important;
+    background: var(--cw-nav-bg) !important;
+    border-right: 1px solid var(--cw-nav-line) !important;
+    box-shadow: 4px 0 32px rgba(0, 1, 71, 0.05) !important;
+}
+
+#sidebar .sidebar-wrapper {
+    padding: 16px 14px !important;
+    gap: 0;
+}
+
+.sidebar-header {
+    justify-content: flex-start !important;
+    padding: 4px 6px 14px !important;
+    margin-bottom: 8px !important;
+    border-bottom: 1px solid var(--cw-nav-line) !important;
+}
+
+.sidebar-header .logo {
+    justify-content: flex-start !important;
+    width: auto !important;
+}
+
+.sidebar-header .logo img {
+    max-width: 132px !important;
+}
+
+/* Top bar móvil */
+.cw-topbar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin: 0 0 12px;
+    background: #fff;
+    border: 1px solid var(--cw-nav-line);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0, 1, 71, 0.04);
+}
+
+.cw-topbar__menu {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #000147, #1a1a6e);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(0, 1, 71, 0.22);
+}
+
+.cw-topbar__brand {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    text-decoration: none !important;
+}
+
+.cw-topbar__brand strong {
+    font-size: 0.92rem;
+    color: var(--cw-nav-primary);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.cw-topbar__brand span {
+    font-size: 0.72rem;
+    color: var(--cw-nav-muted);
+}
+
+.cw-topbar__pay {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    color: #9a3412;
+    text-decoration: none !important;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.cw-topbar__pay i {
+    font-size: 0.9rem;
+}
+
+/* Card cuenta */
+.client-card {
+    margin: 0 0 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--cw-nav-line) !important;
+    background: linear-gradient(180deg, #f8fafc, #fff) !important;
+    gap: 10px !important;
+}
+
+.client-card__avatar {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+    background: #eff6ff !important;
+    color: var(--cw-nav-primary) !important;
+    font-size: 1.25rem !important;
+}
+
+.client-card__label {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cw-nav-muted) !important;
+}
+
+.client-card__name {
+    font-size: 0.86rem !important;
+    font-weight: 700 !important;
+    color: var(--cw-nav-ink) !important;
+}
+
+.client-card__company {
+    font-size: 0.72rem !important;
+    color: var(--cw-nav-muted) !important;
+}
+
+/* Alerta pagos compacta (solo sidebar) */
+.sidebar-alert {
+    margin: 0 0 12px !important;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #fff7ed, #ffedd5) !important;
+    border: 1px solid #fdba74 !important;
+}
+
+.sidebar-alert__text strong {
+    font-size: 0.8rem !important;
+}
+
+.sidebar-alert__text small {
+    font-size: 0.7rem !important;
+}
+
+/* Secciones menú — sin descripciones largas */
+.menu-section {
+    margin-bottom: 14px !important;
+}
+
+.menu-section__head {
+    padding: 0 10px 6px !important;
+    margin-bottom: 4px !important;
+    border-bottom: none !important;
+}
+
+.menu-section__title {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.06em !important;
+    color: #94a3b8 !important;
+}
+
+.menu-section__desc {
+    display: none !important;
+}
+
+.menu-section__items {
+    gap: 2px !important;
+    padding: 0 !important;
+}
+
+#sidebar .sidebar-wrapper .menu .sidebar-link,
+#sidebar .sidebar-wrapper .menu .sidebar-item .sidebar-link {
+    padding: 9px 10px !important;
+    border-radius: 10px !important;
+    gap: 10px !important;
+    font-size: 0.875rem !important;
+    position: relative;
+}
+
+.sidebar-link__icon {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 9px !important;
+    background: var(--cw-nav-soft) !important;
+    border: none !important;
+}
+
+.sidebar-link__icon i {
+    font-size: 0.95rem !important;
+    color: #475569 !important;
+}
+
+#sidebar .sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
+    background: linear-gradient(135deg, #000147 0%, #1b1b74 100%) !important;
+    box-shadow: 0 8px 20px rgba(0, 1, 71, 0.26) !important;
+}
+
+/* Marca de posición centrada: la barra a sangre chocaba con el radio de 10px. */
+#sidebar .sidebar-wrapper .menu .sidebar-item.active .sidebar-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 18px;
+    width: 3px;
+    border-radius: 0 4px 4px 0;
+    background: var(--cw-nav-accent);
+}
+
+.sidebar-item.active .sidebar-link__icon {
+    background: rgba(255, 255, 255, 0.16) !important;
+}
+
+.sidebar-item.active .sidebar-link__icon i {
+    color: #6ee7b7 !important;
+}
+
+.menu-pill {
+    background: #f59e0b !important;
+    color: #fff !important;
+    font-size: 0.68rem !important;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.sidebar-item.active .menu-pill {
+    background: #fbbf24 !important;
+    color: #000147 !important;
+}
+
+.sidebar-footer {
+    padding-top: 10px !important;
+    border-top: 1px solid var(--cw-nav-line) !important;
+    margin-top: auto;
+}
+
+.sidebar-logout {
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    font-size: 0.84rem !important;
+}
+
+/* Refinamientos visuales */
+#sidebar {
+    background: linear-gradient(180deg, #ffffff 0%, #fcfdff 100%) !important;
+}
+
+#sidebar .sidebar-wrapper .menu .sidebar-link,
+.client-card,
+.sidebar-alert,
+.sidebar-logout {
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+        transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.sidebar-link__icon,
+.sidebar-link__icon i {
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+/* El hover sólo debe afectar a lo que no está activo. */
+#sidebar .sidebar-wrapper .menu .sidebar-item:not(.active) .sidebar-link:hover {
+    background: #f4f7fc !important;
+    color: var(--cw-nav-primary) !important;
+    transform: translateX(2px);
+}
+
+#sidebar .sidebar-wrapper .menu .sidebar-item:not(.active) .sidebar-link:hover .sidebar-link__icon {
+    background: #e6edfb !important;
+}
+
+#sidebar .sidebar-wrapper .menu .sidebar-item:not(.active) .sidebar-link:hover .sidebar-link__icon i {
+    color: var(--cw-nav-primary) !important;
+    transform: scale(1.06);
+}
+
+#sidebar a:focus-visible,
+#sidebar button:focus-visible {
+    outline: 2px solid var(--cw-nav-primary);
+    outline-offset: 2px;
+    border-radius: 10px;
+}
+
+.menu-pill {
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
+}
+
+.sidebar-logout {
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600 !important;
+    color: var(--cw-nav-muted) !important;
+    background: #fff !important;
+    border: 1px solid var(--cw-nav-line) !important;
+}
+
+.sidebar-logout:hover {
+    background: #fef2f2 !important;
+    border-color: #fecaca !important;
+    color: #b91c1c !important;
+}
+
+#sidebar .sidebar-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+#sidebar .sidebar-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+#sidebar .sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+
+#sidebar .sidebar-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.menu-section__head {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+}
+
+.menu-section__head::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--cw-nav-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #sidebar *,
+    .cw-nav-backdrop {
+        transition: none !important;
+    }
+}
+
+/* Backdrop drawer */
+.cw-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.cw-nav-backdrop.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+body.cw-nav-open {
+    overflow: hidden;
+}
+
+/* Mobile / tablet: drawer */
+@media (max-width: 1199.98px) {
+    /* App bar a sangre: sin margen lateral ni esquinas redondeadas. */
+    #main > header.mb-3 {
+        padding: 0 !important;
+    }
+
+    /* Rejilla de 3 columnas: las ranuras laterales miden igual (42px),
+       así el logo queda centrado exista o no el aviso de pagos. */
+    .cw-topbar {
+        display: grid;
+        grid-template-columns: 42px 1fr minmax(42px, auto);
+        align-items: center;
+        margin: 0 0 12px;
+        padding: 10px 14px;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+    }
+
+    .cw-topbar__brand {
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Nada debe rebasar el ancho de la pantalla. */
+    #main img,
+    #main pre,
+    #main iframe,
+    #main video {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #sidebar {
+        display: block !important;
+        transform: translateX(-105%);
+        transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        z-index: 1001 !important;
+    }
+
+    #sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    #main {
+        margin-left: 0 !important;
+    }
+
+    .mobile-menu-btn {
+        display: none !important;
+    }
+
+    .payment-alert-modern {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .cw-topbar {
+        display: none !important;
+    }
+
+    .cw-nav-backdrop {
+        display: none !important;
+    }
+
+    /* En escritorio no hay botón de cerrar, así que el logo va centrado. */
+    .sidebar-header {
+        justify-content: center !important;
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+    }
+
+    .sidebar-header .logo {
+        justify-content: center !important;
+        width: 100% !important;
+    }
+
+    .sidebar-header .logo img {
+        margin: 0 auto !important;
+    }
+}

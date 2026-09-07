@@ -1,0 +1,224 @@
+/* Bloque expandible "Más información" — hosting y dominios */
+.mi-details {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+    overflow: hidden;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.mi-details--compact {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.mi-details--compact .mi-details__summary {
+    padding: 10px 12px;
+    font-size: .8rem;
+}
+
+.mi-details--compact .mi-details__body {
+    padding: 12px;
+}
+
+.mi-details__note {
+    margin: 12px 0 0;
+    font-size: .78rem;
+    color: #64748b;
+    line-height: 1.45;
+}
+
+.mi-details[open] {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 16px rgba(0, 1, 71, .06);
+    background: #fff;
+}
+
+.mi-details__summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    font-size: .84rem;
+    font-weight: 600;
+    color: #475569;
+    user-select: none;
+    transition: color .2s ease, background .2s ease;
+}
+
+.mi-details__summary::-webkit-details-marker { display: none; }
+
+.mi-details__summary:hover {
+    color: #000147;
+    background: rgba(0, 1, 71, .03);
+}
+
+.mi-details[open] .mi-details__summary {
+    color: #000147;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.mi-details__summary-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mi-details__summary-left > i:first-child {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #000147;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .9rem;
+    flex-shrink: 0;
+}
+
+.mi-details__chevron {
+    font-size: .8rem;
+    color: #94a3b8;
+    transition: transform .2s ease, color .2s ease;
+    flex-shrink: 0;
+}
+
+.mi-details[open] .mi-details__chevron {
+    transform: rotate(180deg);
+    color: #000147;
+}
+
+.mi-details__body {
+    padding: 14px;
+}
+
+.mi-details__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 10px;
+}
+
+.mi-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.mi-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 10px rgba(0, 1, 71, .06);
+    transform: translateY(-1px);
+}
+
+.mi-card__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: #eef2ff;
+    color: #000147;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.mi-card__content {
+    min-width: 0;
+    flex: 1;
+}
+
+.mi-card__label {
+    display: block;
+    font-size: .68rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 3px;
+    line-height: 1.2;
+}
+
+.mi-card__value {
+    display: block;
+    font-size: .88rem;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+.mi-dns {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.mi-dns__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .72rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 10px;
+}
+
+.mi-dns__head i {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: #eef2ff;
+    color: #000147;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .85rem;
+}
+
+.mi-dns__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.mi-dns__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #334155;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.mi-dns__tag i {
+    color: #000147;
+    font-size: .75rem;
+}
+
+@media (max-width: 768px) {
+    .mi-details__grid {
+        grid-template-columns: 1fr;
+    }
+}

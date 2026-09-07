@@ -1,0 +1,247 @@
+/* Portal clientes — Mis dominios (claridad UX) */
+
+.gd-page {
+    padding-bottom: 2rem;
+}
+
+.gd-diff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+}
+
+.gd-diff__item {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.75rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.gd-diff__item strong {
+    font-size: 0.8rem;
+    color: #000147;
+}
+
+.gd-diff__item span {
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+.gd-pay-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    text-decoration: none !important;
+    color: #9a3412;
+    font-size: 0.9rem;
+}
+
+.gd-pay-strip:hover {
+    color: #7c2d12;
+}
+
+.gd-pay-strip__cta {
+    margin-left: auto;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.gd-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: stretch;
+    margin-bottom: 1.15rem;
+}
+
+.gd-page .gd-tabs {
+    flex: 1 1 320px;
+    margin-bottom: 0;
+}
+
+.gd-tab__label-short {
+    display: none;
+}
+
+.gd-search {
+    flex: 0 1 260px;
+    min-width: 180px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0 0.9rem;
+    color: #64748b;
+}
+
+.gd-search input {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    background: transparent;
+    color: #0f172a;
+}
+
+.gd-can-do {
+    margin: 0.45rem 0 0;
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+.gd-can-do--warn {
+    color: #c2410c;
+}
+
+.domain-title--muted {
+    color: #64748b !important;
+    font-weight: 600 !important;
+}
+
+.status-pending-payment--link {
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.status-pending-payment--link:hover {
+    background: #fed7aa;
+    color: #9a3412;
+}
+
+.svc-btn--primary-action {
+    background: #000147 !important;
+    border-color: #000147 !important;
+    color: #fff !important;
+}
+
+.svc-btn--primary-action i {
+    color: #fff !important;
+}
+
+.svc-btn--primary-action:hover {
+    background: #1a1a6e !important;
+    color: #fff !important;
+}
+
+.svc-btn--pay {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-decoration: none !important;
+    background: #ea580c !important;
+    border: 1px solid #ea580c !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+}
+
+.svc-btn--pay:hover {
+    background: #c2410c !important;
+    color: #fff !important;
+}
+
+.svc-btn--modal {
+    text-decoration: none !important;
+}
+
+.gd-help-link {
+    margin: 0.75rem 0 0;
+    font-size: 0.86rem;
+}
+
+.gd-help-link a {
+    font-weight: 700;
+    color: #000147;
+}
+
+.gd-empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.gd-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.86rem;
+    text-decoration: none !important;
+    background: #000147;
+    color: #fff;
+}
+
+.gd-empty-btn:hover {
+    background: #1a1a6e;
+    color: #fff;
+}
+
+.gd-empty-btn--ghost {
+    background: #fff;
+    color: #000147;
+    border: 1.5px solid #000147;
+}
+
+.gd-no-results {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+    padding: 1.5rem;
+}
+
+.gd-domain-icon {
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .gd-diff {
+        grid-template-columns: 1fr;
+    }
+
+    .gd-tab__label-full {
+        display: none;
+    }
+
+    .gd-tab__label-short {
+        display: inline;
+    }
+
+    .gd-toolbar {
+        flex-direction: column;
+    }
+
+    .gd-search {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .gd-pay-strip__cta {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

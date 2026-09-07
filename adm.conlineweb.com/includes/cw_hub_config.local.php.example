@@ -1,0 +1,13 @@
+<?php
+/** Copiar a cw_hub_config.local.php — SOLO desarrollo local. */
+$__cw_host = strtolower((string) preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''));
+if ($__cw_host !== '' && preg_match('/(^|\.)conlineweb\.com$/', $__cw_host)) {
+    return;
+}
+
+define('CW_HUB_ANALYTICS_PRODUCTION_ONLY', false);
+define('CW_HUB_API_KEY', 'cwhub_k8m2p9x4v7n1q5w3r6t0y2z8');
+define('CW_HUB_WHATSAPP', '5214771181285');
+define('CW_HUB_N8N_WEBHOOK', '');
+define('CW_HUB_AUTO_WA_WELCOME', false);
+define('CW_HUB_ALERT_EMAIL', 'servicios@conlineweb.com');

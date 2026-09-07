@@ -1,0 +1,20 @@
+<?php
+/**
+ * Overrides opcionales de BD en local — NO obligatorio.
+ * conn.php ya usa la BD en la nube por defecto (funciona en local y producción).
+ * Si se sube por error a producción, no aplica (host *.conlineweb.com).
+ */
+$__cw_host = strtolower((string) preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'] ?? ''));
+if ($__cw_host !== '' && preg_match('/(^|\.)conlineweb\.com$/', $__cw_host)) {
+    return;
+}
+
+$dbhost = 'cpanel.conlineweb.com';
+$dbuser = 'admin_clientes';
+$dbpass = 'TU_PASSWORD';
+$dbname = 'admin_clientes';
+
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass, $dbname);
+if (!$conn) {
+    die('Error de conexión local: ' . mysqli_connect_error());
+}

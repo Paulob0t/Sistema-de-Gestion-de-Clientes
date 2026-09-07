@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS cotizaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    folio VARCHAR(50) NOT NULL,
+    id_cliente INT NULL,
+    cliente_nombre VARCHAR(255),
+    id_proyecto INT NULL,
+    proyecto_nombre VARCHAR(255),
+    solicitudes_ids JSON NOT NULL,
+    items JSON NOT NULL,
+    subtotal DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    descuento_porcentaje DECIMAL(5,2) NOT NULL DEFAULT 30.00,
+    descuento_monto DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    total DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    moneda VARCHAR(10) DEFAULT 'MXN',
+    estatus ENUM('Activa', 'Cancelada') DEFAULT 'Activa',
+    pdf_path VARCHAR(500),
+    ai_response_raw LONGTEXT,
+    created_by INT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_folio (folio),
+    INDEX idx_cliente (id_cliente),
+    INDEX idx_estatus (estatus)
+);

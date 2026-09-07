@@ -1,0 +1,16 @@
+# CORS para cuando el navegador llame directo a adm (respaldo)
+<IfModule mod_headers.c>
+    SetEnvIf Origin "^https://(www\.)?conlineweb\.(com|cl)$" CORS_OK=1
+    Header always set Access-Control-Allow-Origin "%{HTTP:Origin}e" env=CORS_OK
+    Header always set Access-Control-Allow-Methods "POST, OPTIONS" env=CORS_OK
+    Header always set Access-Control-Allow-Headers "Content-Type, X-CW-Hub-Key" env=CORS_OK
+    Header always set Access-Control-Max-Age "86400" env=CORS_OK
+    Header always set Vary "Origin" env=CORS_OK
+</IfModule>
+
+# Que OPTIONS llegue a PHP (no solo respuesta vacía de Apache)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} =OPTIONS
+    RewriteRule ^(.*)$ $1 [L]
+</IfModule>

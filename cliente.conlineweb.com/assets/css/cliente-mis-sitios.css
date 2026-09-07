@@ -1,0 +1,510 @@
+/* Portal clientes — Mis sitios web */
+
+.ms-page {
+    padding-bottom: 2rem;
+}
+
+.ms-pay-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    text-decoration: none !important;
+    color: #9a3412;
+    font-size: 0.9rem;
+}
+
+.ms-pay-strip:hover {
+    color: #7c2d12;
+}
+
+.ms-pay-strip__cta {
+    margin-left: auto;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.ms-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: stretch;
+    margin-bottom: 1.15rem;
+}
+
+.ms-tabs {
+    display: flex;
+    gap: 8px;
+    flex: 1 1 320px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 1, 71, 0.04);
+}
+
+.ms-tab {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: transparent;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.86rem;
+    text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.ms-tab:hover {
+    background: #f8fafc;
+    color: #000147;
+}
+
+.ms-tab.active {
+    background: #000147;
+    border-color: #000147;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(0, 1, 71, 0.2);
+}
+
+.ms-tab-count {
+    background: rgba(0, 0, 0, 0.06);
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 26px;
+    text-align: center;
+}
+
+.ms-tab.active .ms-tab-count {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
+}
+
+.ms-tab__label-short {
+    display: none;
+}
+
+.ms-search {
+    flex: 0 1 260px;
+    min-width: 180px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0 0.9rem;
+    color: #64748b;
+}
+
+.ms-search input {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    background: transparent;
+    color: #0f172a;
+}
+
+.ms-panel {
+    display: none;
+    animation: msFadeIn 0.3s ease;
+}
+
+.ms-panel.active {
+    display: block;
+}
+
+@keyframes msFadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ms-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #000147;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 0.84rem;
+    color: #334155;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.ms-hint--warn {
+    background: #fffbeb;
+    border-color: #fcd34d;
+    border-left-color: #f59e0b;
+    color: #92400e;
+}
+
+.ms-hint i {
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+/* Mismos valores que .card-domain en cliente-servicios.css (hosting y dominios). */
+.card-domain {
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 16px rgba(0, 1, 71, 0.06) !important;
+    transition: box-shadow 0.25s ease, transform 0.25s ease !important;
+    padding: 1rem 1.15rem !important;
+    background: #fff;
+}
+
+.card-domain::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #000147, #10b981);
+}
+
+.card-domain:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 12px 28px rgba(0, 1, 71, 0.1) !important;
+}
+
+.card-domain--muted::before {
+    background: linear-gradient(90deg, #94a3b8, #cbd5e1);
+}
+
+.ms-site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ms-site-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.ms-site-name__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.ms-site-sub {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ms-site-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #eff6ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000147;
+    font-size: 1rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.ms-site-icon--muted {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.domain-title {
+    font-size: 1.02rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    text-decoration: none !important;
+    word-break: break-all;
+}
+
+.domain-title:hover {
+    color: #000147 !important;
+}
+
+.ms-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.domain-status {
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    padding: 5px 12px !important;
+    border-radius: 20px !important;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none !important;
+}
+
+.status-active { background: #dcfce7; color: #166534; }
+.status-pending-payment { background: #ffedd5; color: #c2410c; }
+.status-pending-payment--link:hover { background: #fed7aa; color: #9a3412; }
+.status-registered { background: #dbeafe; color: #1e40af; }
+.status-other-provider { background: #fef3c7; color: #92400e; }
+
+.ms-actions--compact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: stretch;
+}
+
+/* Métricas alineadas con .svc-btn de cliente-servicios.css. */
+.ms-actions--compact .ms-action-btn {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1 1 auto;
+    min-width: 110px;
+}
+
+.ms-action-btn--primary {
+    background: #000147 !important;
+    border-color: #000147 !important;
+    color: #fff !important;
+}
+
+.ms-action-btn--primary i {
+    color: #fff !important;
+}
+
+.ms-action-btn--primary:hover {
+    background: #1a1a6e !important;
+    color: #fff !important;
+}
+
+.ms-actions--compact .ms-action-btn--wp i { color: #2563eb; }
+.ms-actions--compact .ms-action-btn--panel i { color: #059669; }
+.ms-actions--compact .ms-action-btn--platform i { color: #ea580c; }
+
+.ms-actions--compact .ms-action-btn:hover:not(:disabled):not(.ms-action-btn--primary) {
+    transform: translateY(-1px);
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 1, 71, 0.08);
+    color: #000147;
+}
+
+.ms-actions--compact .ms-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f1f5f9;
+}
+
+.ms-more {
+    flex: 1 1 auto;
+    min-width: 110px;
+    position: relative;
+}
+
+.ms-more__summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px dashed #cbd5e1;
+    background: #f8fafc;
+    color: #64748b;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.ms-more__summary::-webkit-details-marker {
+    display: none;
+}
+
+.ms-more[open] .ms-more__summary {
+    border-color: #94a3b8;
+    color: #334155;
+}
+
+.ms-more__menu {
+    margin-top: 6px;
+}
+
+.ms-more__menu .ms-action-btn {
+    width: 100%;
+}
+
+.ms-creds-note {
+    margin: 0.75rem 0 0;
+    font-size: 0.8rem;
+    color: #64748b;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 0.55rem 0.7rem;
+}
+
+.ms-creds-note a {
+    font-weight: 700;
+    color: #000147;
+}
+
+.ms-empty {
+    text-align: center;
+    padding: 48px 24px;
+    background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+    border-radius: 16px;
+    border: 2px dashed #cbd5e1;
+}
+
+.ms-empty-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #cbd5e1;
+    margin-bottom: 16px;
+}
+
+.ms-empty-icon--success {
+    background: #ecfdf5;
+    color: #10b981;
+}
+
+.ms-empty h5 {
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.ms-empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.ms-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.86rem;
+    text-decoration: none !important;
+    background: #000147;
+    color: #fff;
+}
+
+.ms-empty-btn:hover {
+    background: #1a1a6e;
+    color: #fff;
+}
+
+.ms-empty-btn--ghost {
+    background: #fff;
+    color: #000147;
+    border: 1.5px solid #000147;
+}
+
+.ms-no-results {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+    padding: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .ms-tab__label-full {
+        display: none;
+    }
+
+    .ms-tab__label-short {
+        display: inline;
+    }
+
+    /* Padding lateral reducido: el contenido queda a ~15px del borde. */
+    .ms-pay-strip,
+    .ms-hint,
+    .ms-empty {
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+    }
+
+    .ms-toolbar {
+        flex-direction: column;
+    }
+
+    .ms-search {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .ms-site-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ms-actions--compact .ms-action-btn,
+    .ms-more {
+        min-width: calc(50% - 4px);
+        flex: 1 1 calc(50% - 4px);
+    }
+
+    .ms-pay-strip__cta {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

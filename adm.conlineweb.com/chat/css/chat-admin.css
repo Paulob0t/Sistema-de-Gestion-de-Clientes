@@ -1,0 +1,260 @@
+/* Chat admin — Base de conocimiento, config, estadísticas */
+.chat-admin-page {
+    font-family: Montserrat, 'Inter', sans-serif;
+    color: #0f172a;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.chat-admin-page .container-fluid:not(.px-0) {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
+
+@media (max-width: 767px) {
+    .chat-admin-page .container-fluid:not(.px-0) {
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+    }
+}
+
+.ch-admin-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.ch-admin-header h1 {
+    color: #000147;
+    font-weight: 700;
+}
+
+.ch-admin-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ch-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+}
+
+.ch-stat-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.ch-stat-card i {
+    font-size: 1.35rem;
+    color: #000147;
+    flex-shrink: 0;
+}
+
+.ch-stat-card strong {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: #0f172a;
+}
+
+.ch-stat-card span {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.15rem;
+}
+
+.ch-card {
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+    background: #fff;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.ch-card .card-body {
+    padding: 1.25rem;
+}
+
+.ch-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.ch-search-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1 1 280px;
+    min-width: 0;
+}
+
+.ch-search-form .form-control {
+    flex: 1 1 200px;
+    min-width: 0;
+}
+
+.ch-toolbar__actions {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.ch-table {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.ch-table thead th {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+    font-weight: 600;
+    border-top: none;
+    white-space: nowrap;
+    background: #f8fafc;
+}
+
+.ch-table tbody td {
+    vertical-align: middle;
+    border-color: #eef2f7;
+}
+
+.ch-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.ch-table code {
+    font-size: 0.8rem;
+    color: #000147;
+    background: #eef2ff;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+}
+
+.ch-table .ch-title-cell strong {
+    display: block;
+    color: #0f172a;
+    font-size: 0.92rem;
+}
+
+.ch-table .ch-title-cell small {
+    display: block;
+    margin-top: 0.2rem;
+    line-height: 1.35;
+}
+
+.ch-empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: #64748b;
+}
+
+.ch-empty i {
+    font-size: 2rem;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.ch-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.88rem;
+}
+
+.ch-list li {
+    margin-bottom: 0.4rem;
+}
+
+/* Modal por encima del sidebar (z-index 1050) */
+body .modal#modalConocimiento {
+    z-index: 1100 !important;
+}
+
+body .modal-backdrop {
+    z-index: 1090 !important;
+}
+
+#modalConocimiento .modal-content {
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.2);
+}
+
+#modalConocimiento .modal-header {
+    background: linear-gradient(135deg, #000147, #04055c);
+    color: #fff;
+    border-radius: 14px 14px 0 0;
+    padding: 1rem 1.25rem;
+}
+
+#modalConocimiento .modal-header .close {
+    color: #fff;
+    opacity: 0.85;
+    text-shadow: none;
+}
+
+#modalConocimiento .modal-title {
+    font-weight: 600;
+}
+
+#modalConocimiento .modal-body {
+    padding: 1.25rem;
+}
+
+#modalConocimiento .modal-footer {
+    border-top: 1px solid #e2e8f0;
+    padding: 0.85rem 1.25rem;
+}
+
+#modalConocimiento label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 0.35rem;
+}
+
+.ch-toast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1200;
+    min-width: 260px;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none;
+}
+
+.ch-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ch-toast--ok { background: #059669; }
+.ch-toast--err { background: #dc2626; }

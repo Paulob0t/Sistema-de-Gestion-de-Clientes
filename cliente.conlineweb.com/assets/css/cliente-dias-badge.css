@@ -1,0 +1,122 @@
+.days-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    max-width: 100%;
+    line-height: 1.25;
+}
+
+.days-badge__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 6px;
+    border-radius: 7px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.days-badge__num--text {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.days-badge__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.days-badge__label i {
+    font-size: 0.82rem;
+    flex-shrink: 0;
+}
+
+.days-badge--ok {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.days-badge--ok .days-badge__num {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.days-badge--ok .days-badge__label i {
+    color: #16a34a;
+}
+
+.days-badge--warn {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.days-badge--warn .days-badge__num {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.days-badge--warn .days-badge__label i {
+    color: #d97706;
+}
+
+.days-badge--today {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #c2410c;
+}
+
+.days-badge--today .days-badge__num {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+.days-badge--today .days-badge__label i {
+    color: #ea580c;
+}
+
+.days-badge--expired {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.days-badge--expired .days-badge__num {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.days-badge--expired .days-badge__label i {
+    color: #dc2626;
+}
+
+@media (max-width: 768px) {
+    .days-badge {
+        padding: 6px 8px;
+        gap: 8px;
+    }
+
+    .days-badge__num {
+        min-width: 28px;
+        height: 28px;
+        font-size: 0.88rem;
+    }
+
+    .days-badge__label {
+        font-size: 0.76rem;
+    }
+}

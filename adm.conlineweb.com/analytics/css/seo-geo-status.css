@@ -1,0 +1,252 @@
+/* Estado SEO/GEO México — checklist legible */
+
+.sgs-objective {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(3, 105, 161, 0.22);
+  border-radius: 12px;
+  background: #f0f9ff;
+}
+
+.sgs-objective strong {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0369a1;
+}
+
+.sgs-objective p {
+  margin: 0;
+  color: #0f172a;
+  line-height: 1.65;
+  font-size: 0.9rem;
+}
+
+.sgs-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+
+.sgs-badge--done {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.sgs-badge--partial {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.sgs-badge--pending {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.sgs-badge--manual {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.sgs-kpis .va-kpi {
+  border-top: 3px solid #e2e8f0;
+}
+
+.sgs-kpi-done { border-top-color: #16a34a !important; }
+.sgs-kpi-partial { border-top-color: #d97706 !important; }
+.sgs-kpi-pending { border-top-color: #dc2626 !important; }
+.sgs-kpi-manual { border-top-color: #4f46e5 !important; }
+
+.va-kpi-grid-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 1100px) {
+  .va-kpi-grid-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sgs-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+}
+
+.sgs-filter a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #334155;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.sgs-filter a:hover,
+.sgs-filter a.active {
+  color: #0f172a;
+  border-color: #0369a1;
+  background: #e0f2fe;
+}
+
+.sgs-next {
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(22, 163, 74, 0.25);
+  background: #f0fdf4;
+}
+
+.sgs-next h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #14532d;
+}
+
+.sgs-next-list {
+  margin: 0.75rem 0 0.5rem;
+  padding-left: 1.25rem;
+  color: #166534;
+  line-height: 1.6;
+}
+
+.sgs-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.sgs-section {
+  margin-bottom: 1.25rem;
+}
+
+.sgs-section-head h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.12rem;
+  color: #0f172a;
+}
+
+.sgs-sub {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
+.sgs-items {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sgs-item {
+  padding: 0.9rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  border-left-width: 4px;
+}
+
+.sgs-item--done { border-left-color: #16a34a; }
+.sgs-item--partial { border-left-color: #d97706; }
+.sgs-item--pending { border-left-color: #dc2626; }
+.sgs-item--manual { border-left-color: #4f46e5; }
+
+.sgs-item-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.sgs-item h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.sgs-plain {
+  margin: 0 0 0.45rem;
+  color: #334155;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.sgs-evidence,
+.sgs-action {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.sgs-action strong {
+  color: #0f172a;
+}
+
+.sgs-link {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+}
+
+.sgs-link a {
+  color: #0369a1;
+  font-weight: 600;
+}
+
+.sgs-table-wrap {
+  margin-top: 0.75rem;
+}
+
+.sgs-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.sgs-table td {
+  font-size: 0.86rem;
+  vertical-align: middle;
+}
+
+.sgs-tier {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.sgs-tier--p1 { background: #dbeafe; color: #1d4ed8; }
+.sgs-tier--p2 { background: #f1f5f9; color: #475569; }
+.sgs-tier--p3 { background: #fef3c7; color: #92400e; }
+
+.sgs-missing-hint {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.sgs-table-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.sgs-alert {
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+}

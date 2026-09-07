@@ -1,0 +1,1296 @@
+/* ==========================================================================
+   cliente-mobile.css — Sistema de diseño móvil del portal de clientes.
+
+   Se carga desde footer.php, después del CSS de cada página, para ganar la
+   cascada sin subir la especificidad en cada hoja.
+
+   CRITERIO DE BREAKPOINTS
+   El menú lateral se convierte en drawer a 1199.98px (cliente-menu.css:390).
+   Todo el layout móvil usa ESE mismo corte. Antes había reglas a 767.98px,
+   lo que dejaba el rango 768–1199px (tablet vertical, móvil en horizontal)
+   con layout de escritorio y menú de móvil. Los cortes menores solo afinan
+   densidad, nunca cambian la estructura.
+
+     1199.98px  estructura móvil (drawer activo)
+      767.98px  densidad: rejillas a una columna
+      479.98px  teléfonos estrechos
+
+   ESCALA DE TOKENS
+   Derivada de los valores ya dominantes en el proyecto, para no alterar la
+   identidad visual. Sustituye 66 tamaños de fuente, 53 valores de padding,
+   24 radios y 66 sombras por una escala corta y predecible.
+
+   FUERA DE MEDIA QUERY solo hay una sección (chat sobre modales), por ser
+   un fallo de apilamiento que también afecta a escritorio. Está marcada.
+   ========================================================================== */
+
+:root {
+    /* Tipografía. El piso son 12px: por debajo es ilegible en un teléfono. */
+    --cwm-fs-2xs: 0.75rem;      /* 12px  badges, etiquetas de tabla */
+    --cwm-fs-xs: 0.8125rem;     /* 13px  metadatos, fechas, pistas */
+    --cwm-fs-sm: 0.875rem;      /* 14px  texto secundario, botones */
+    --cwm-fs-md: 0.9375rem;     /* 15px  cuerpo por defecto */
+    --cwm-fs-lg: 1.0625rem;     /* 17px  título de tarjeta */
+    --cwm-fs-xl: 1.25rem;       /* 20px  título de sección */
+    --cwm-fs-2xl: 1.5rem;       /* 24px  título de página */
+
+    /* Espaciado, base 4px. */
+    --cwm-sp-1: 4px;
+    --cwm-sp-2: 8px;
+    --cwm-sp-3: 12px;
+    --cwm-sp-4: 16px;
+    --cwm-sp-5: 20px;
+    --cwm-sp-6: 24px;
+
+    /* Relleno interior de las tarjetas a ancho completo. */
+    --cwm-card-pad: 16px;
+
+    /* Altura mínima táctil. */
+    --cwm-touch: 44px;
+
+    /* Alto de la cabecera móvil fija: 10px + 10px de relleno más la marca en
+       dos líneas. Sirve de referencia para todo lo que deba quedar por
+       debajo de ella al desplazar. */
+    --cwm-header-h: 60px;
+
+    --cwm-lh-tight: 1.2;
+    --cwm-lh-snug: 1.35;
+    --cwm-lh-normal: 1.55;
+
+    /* Grises de texto con contraste suficiente sobre blanco.
+       #94a3b8 (2.8:1) y #cbd5e1 (1.6:1) no alcanzan AA y se retiran como
+       color de texto; quedan solo para iconos decorativos y bordes. */
+    --cwm-text-strong: #0f172a;
+    --cwm-text-body: #334155;
+    --cwm-text-muted: #64748b;
+}
+
+
+/* ==========================================================================
+   0. FUERA DE MEDIA QUERY — El chat no debe taparle los botones a un modal.
+
+   .cw-chat-fab usa z-index 10000 (chat-widget.css:18), por encima de los
+   modales de Bootstrap (1055) y de SweetAlert2 (1060). Queda anclado abajo
+   a la derecha, justo donde caen "Guardar DNS", "Enviar solicitud" o
+   "Continuar al pago". Los parches con z-index 9999 de pagos.css y
+   tickets.css no alcanzaban. Se oculta mientras haya un modal abierto.
+   ========================================================================== */
+body.modal-open .cw-chat-fab,
+body.swal2-shown .cw-chat-fab,
+body.modal-open .cw-chat-panel,
+body.swal2-shown .cw-chat-panel {
+    display: none !important;
+}
+
+
+/* ==========================================================================
+   1. ESTRUCTURA Y CONTENCIÓN
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* Ningún contenedor debe provocar scroll horizontal. menu.php aplica
+       body{overflow-x:hidden}, que lo oculta en vez de evitarlo: si no se
+       atacan las causas, el contenido se corta sin aviso. */
+    #main,
+    #main .page-content,
+    #main .main-content,
+    #app,
+    #main #app {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    /* Ancho completo: el contenido llega al borde. El respiro lo da el
+       relleno interior de cada tarjeta, no una suma de contenedores. */
+    #main .page-content,
+    #main .page-content .page-content,
+    #main .main-content,
+    #main .main-content.container-fluid,
+    #app > .main-content,
+    #main .container,
+    #main .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* Los gutters de Bootstrap se compensan con el margen negativo de .row.
+       Si se anula el margen pero se deja el gutter, el relleno de las
+       columnas deja de estar compensado y reaparece como separación. */
+    #main .row {
+        --bs-gutter-x: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    #main [class^="col-"],
+    #main [class*=" col-"],
+    #main .col {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* Palabras largas sin espacios: dominios, correos, referencias. */
+    #main p,
+    #main td,
+    #main th,
+    #main li,
+    #main dd {
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    #main img,
+    #main iframe,
+    #main video,
+    #main pre {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
+/* ==========================================================================
+   2. TARJETAS A ANCHO COMPLETO
+
+   Patrón de banda: la tarjeta ocupa todo el ancho, pierde radio y bordes
+   laterales (que contra el filo parecen un recorte), y conserva su relleno
+   interior para que el texto siga siendo legible. Los bordes superior e
+   inferior se mantienen: son los que separan una tarjeta de la siguiente.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    #main .card,
+    #main .header-section,
+    #main .info-box,
+    #main .ch-alert,
+    #main .ch-kpi__item,
+    #main .ch-quick-card,
+    #main .ch-help,
+    #main .card-domain,
+    #main .ms-pay-strip,
+    #main .ms-hint,
+    #main .ms-empty,
+    #main .ms-creds-note,
+    #main .gd-diff__item,
+    #main .gd-pay-strip,
+    #main .gd-locked,
+    #main .gd-info-list,
+    #main .gd-manage-section,
+    #main .ho-card,
+    #main .ho-diff__item,
+    #main .ho-pay-strip,
+    #main .ho-empty,
+    #main .ho-hint,
+    #main .ho-summary,
+    #main .ho-server,
+    #main .ho-creds-note,
+    #main .mi-card,
+    #main .mi-dns,
+    #main .pg-diff__item,
+    #main .pg-summary__card,
+    #main .pg-datatable-wrap,
+    #main .tk-card,
+    #main .tk-summary__item,
+    #main .tk-wizard-step,
+    #main .tk-wizard-tip {
+        border-radius: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important;
+        padding-left: var(--cwm-card-pad) !important;
+        padding-right: var(--cwm-card-pad) !important;
+        max-width: 100%;
+    }
+
+    /* Las rejillas contenedoras no añaden margen lateral propio. */
+    #main .pg-diff,
+    #main .pg-summary,
+    #main .gd-diff,
+    #main .ho-diff,
+    #main .tk-summary,
+    #main .ch-kpi,
+    #main .ch-quick {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* La barra superior va a sangre, como una app nativa. */
+    #main > header.mb-3 {
+        padding: 0 !important;
+    }
+
+    /* Ritmo vertical único. Entre las tarjetas de primer nivel convivían
+       separaciones de 8, 10, 12, 14, 16 y 18px según la hoja que ganara la
+       cascada; al ir todas a ancho completo, esa irregularidad se lee como
+       una lista mal alineada. Un solo valor da el pulso constante que se
+       espera de una app. */
+    #main .card,
+    #main .card-domain,
+    #main .ho-card,
+    #main .mi-card,
+    #main .ch-alert,
+    #main .ch-quick-card,
+    #main .ch-help,
+    #main .gd-pay-strip,
+    #main .ho-pay-strip,
+    #main .ms-pay-strip,
+    #main .gd-hint,
+    #main .ho-hint,
+    #main .ms-hint,
+    #main .gd-info-list,
+    #main .ho-summary,
+    #main .ho-server,
+    #main .tk-card {
+        margin-bottom: var(--cwm-sp-3) !important;
+    }
+}
+
+/* Tarjetas de dominio: al apilar en columna, flex: 1 1 220px en
+   .gd-domain-main se interpreta como altura mínima y deja un hueco entre
+   el texto descriptivo y la fila de chips (días, fecha, precio). */
+@media (max-width: 1199.98px) {
+
+    #main .gd-domain-header,
+    #main .gd-domain-header--side {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: flex-start !important;
+        gap: var(--cwm-sp-2) !important;
+        margin-bottom: var(--cwm-sp-2) !important;
+        padding-bottom: var(--cwm-sp-2) !important;
+    }
+
+    #main .gd-domain-main {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+    }
+
+    #main .svc-meta--side {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        margin-left: 0 !important;
+        justify-content: flex-start !important;
+    }
+
+    #main .gd-can-do {
+        margin-top: var(--cwm-sp-1) !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+
+/* ==========================================================================
+   3. TIPOGRAFÍA Y JERARQUÍA
+
+   El portal tenía ~55 declaraciones por debajo de 13px y pesos 100/200 en
+   las páginas heredadas, que en un teléfono resultan casi invisibles.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* Piso de 12px. Afecta a badges, contadores y etiquetas en mayúsculas,
+       que eran los más castigados (algunos a 9,9px). */
+    #main .menu-pill,
+    #main .client-card__label,
+    #main .menu-section__title,
+    #main .menu-section__desc,
+    #main .domain-status,
+    #main .status-badge,
+    #main .priority-badge,
+    #main .pg-moneda,
+    #main .pg-tipo,
+    #main .pg-tab-count,
+    #main .gd-tab-count,
+    #main .ho-tab-count,
+    #main .ho-status,
+    #main .ho-server__label,
+    #main .ho-summary-label,
+    #main .mi-card__label,
+    #main .gd-dns-label,
+    #main .tk-summary__label,
+    #main .tk-tabs__badge,
+    #main .tk-list-toolbar__eyebrow,
+    #main thead th {
+        font-size: var(--cwm-fs-2xs) !important;
+        line-height: var(--cwm-lh-snug);
+    }
+
+    /* Título de página. Tenía cuatro tamaños compitiendo según qué media
+       query ganara; aquí queda uno solo. */
+    #main .header-title {
+        font-size: var(--cwm-fs-2xl) !important;
+        line-height: var(--cwm-lh-tight);
+    }
+
+    #main .header-subtitle {
+        font-size: var(--cwm-fs-sm) !important;
+        line-height: var(--cwm-lh-snug);
+    }
+
+    /* Texto de párrafo con interlineado suficiente. La cobertura de
+       line-height en el proyecto no llegaba al 30%. */
+    #main p,
+    #main .ch-quick-desc,
+    #main .ms-hint,
+    #main .ho-hint,
+    #main .mi-card__value {
+        line-height: var(--cwm-lh-normal);
+    }
+
+    /* Grises sin contraste suficiente como color de texto. */
+    #main .ms-site-sub,
+    #main .mi-card__label,
+    #main .ho-summary-label,
+    #main .menu-section__desc,
+    #main .client-card__label,
+    #main .np-legal {
+        color: var(--cwm-text-muted) !important;
+    }
+
+    /* Pesos 100 y 200 heredados de las páginas antiguas: texto fantasma. */
+    #main font,
+    #main .ocultarcel [style*="font-weight"],
+    #main .ocultarpc [style*="font-weight"] {
+        font-weight: 400 !important;
+    }
+}
+
+@media (max-width: 479.98px) {
+
+    #main .header-title {
+        font-size: var(--cwm-fs-xl) !important;
+    }
+}
+
+
+/* ==========================================================================
+   4. REJILLAS Y DENSIDAD
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* pagos.css solo las colapsaba a 900px y tickets.css a 900px, dejando
+       tres o cuatro tarjetas ilegibles justo donde ya actúa el drawer. */
+    .pg-diff,
+    .pg-summary,
+    .gd-diff,
+    .ho-diff,
+    .tk-summary {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Barras de herramientas: envolver en vez de comprimir. */
+    .tk-tabs__toolbar,
+    .gd-toolbar,
+    .ho-toolbar,
+    .pg-dt-toolbar {
+        flex-wrap: wrap !important;
+        gap: var(--cwm-sp-2);
+    }
+
+    .tk-search,
+    .gd-search,
+    .ho-search,
+    .ms-search,
+    .pg-dt-toolbar__left,
+    .pg-dt-toolbar__right {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* La barra fija de selección usaba top:80px, calculado para la topbar de
+       escritorio. Ahora debe quedar justo debajo de la cabecera móvil fija,
+       y en una capa inferior: comparte z-index 100 con ella (pagos.css:128)
+       y, al ir después en el documento, se pintaba por encima. */
+    #pagos-cliente-selection-bar {
+        top: calc(var(--cwm-header-h) + env(safe-area-inset-top) + var(--cwm-sp-2)) !important;
+        z-index: 99 !important;
+    }
+
+    /*
+     * Selectores de sección (Dominios: "ConlineWeb" / "Otro proveedor";
+     * Hosting y Mis sitios equivalentes).
+     *
+     * En origen son pestañas de escritorio: min-width de 220-240px y
+     * padding de 16px 20px. Como no caben, cliente-servicios.css las
+     * apilaba en columna a ≤768px, y el selector pasaba a ocupar unos
+     * 140px de alto antes de que empezara el contenido.
+     *
+     * En móvil se comportan como dos botones en fila que reparten el
+     * ancho: misma función, un tercio de la altura.
+     */
+    #main .gd-tabs,
+    #main .ho-tabs,
+    #main .ms-tabs {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: var(--cwm-sp-2) !important;
+        /* Sin relleno el contenedor mide exactamente lo que los botones:
+           30px. Con los 4px de antes sumaba 38 y volvía a crecer. */
+        padding: 0 !important;
+        height: 30px !important;
+        min-height: 30px !important;
+        max-height: 30px !important;
+        /* En columna, flex: 1 1 320px (cliente-dominios/hosting.css) hace
+           que este contenedor mida 320px de alto aunque los botones sean de
+           30px: es el hueco blanco entre pestañas y buscador en móvil. */
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        /* Sin margen propio: las pestañas van dentro de .gd-toolbar junto al
+           buscador, y es el gap del toolbar el que los separa. El margen que
+           tenían aquí se sumaba a ese gap y duplicaba el hueco. */
+        margin-bottom: 0 !important;
+        border-radius: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        align-items: stretch !important;
+    }
+
+    /* Separación compacta entre pestañas, buscador y el contenido de abajo. */
+    #main .gd-toolbar,
+    #main .ho-toolbar,
+    #main .ms-toolbar {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: var(--cwm-sp-2) !important;
+        margin-bottom: var(--cwm-sp-3) !important;
+    }
+
+    /* Los avisos bajo el toolbar traían 24px de margen inferior. */
+    #main .gd-hint,
+    #main .ho-hint,
+    #main .ms-hint {
+        margin-bottom: var(--cwm-sp-3) !important;
+    }
+
+    /*
+     * Tickets y Pagos quedaban fuera del ajuste anterior: sus hojas prefijan
+     * las reglas con .tickets-page / .pagos-page (dos clases), que ganan a un
+     * selector de una sola clase. Aquí se antepone #main, cuyo identificador
+     * pesa más que cualquier número de clases.
+     *
+     * En tickets se acumulaban 16px del toolbar más 24px del contenedor
+     * .tk-tabs, y en pagos 24px bajo las pestañas, siempre por encima del
+     * buscador.
+     */
+    #main .tk-tabs {
+        margin-bottom: var(--cwm-sp-3) !important;
+    }
+
+    #main .tk-tabs__toolbar {
+        gap: var(--cwm-sp-2) !important;
+        margin-bottom: var(--cwm-sp-3) !important;
+        /* Sin caja propia: a ancho completo el recuadro no aporta y solo
+           añade 12px arriba y abajo. */
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+    }
+
+    #main .nav-tabs {
+        margin-bottom: var(--cwm-sp-3) !important;
+        padding: var(--cwm-sp-1) !important;
+        gap: var(--cwm-sp-2) !important;
+    }
+
+    /* El buscador de DataTables en pagos aportaba su propio margen. */
+    #main .dataTables_filter,
+    #main .pg-dt-toolbar {
+        margin-bottom: var(--cwm-sp-3) !important;
+    }
+
+    #main .gd-tab,
+    #main .ho-tab,
+    #main .ms-tab {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        /* Altura fija de 30px pedida para este componente. Queda por debajo
+           del mínimo táctil de 44px que usa el resto del portal, pero al
+           ocupar cada botón medio ancho de pantalla el objetivo sigue siendo
+           holgado en horizontal. El relleno vertical va a cero para que la
+           altura la marque exactamente esta regla. */
+        height: 30px !important;
+        min-height: 30px !important;
+        padding: 0 var(--cwm-sp-2) !important;
+        font-size: var(--cwm-fs-2xs) !important;
+        line-height: 1 !important;
+        gap: var(--cwm-sp-1) !important;
+        white-space: nowrap;
+    }
+
+    /* El icono decorativo sobra cuando el espacio es el justo. */
+    #main .gd-tab > i,
+    #main .ho-tab > i,
+    #main .ms-tab > i {
+        display: none;
+    }
+
+    #main .gd-tab-count,
+    #main .ho-tab-count,
+    #main .ms-tab-count {
+        padding: 2px var(--cwm-sp-2) !important;
+        min-width: 0 !important;
+        flex-shrink: 0;
+    }
+
+    /* Etiqueta corta en todo el rango móvil. Cada hoja la activaba solo por
+       debajo de 768px, así que entre 768 y 1199px seguía el texto largo
+       ("Gestionados por ConlineWeb", "Pendiente de pago") que con nowrap
+       desbordaría el botón. */
+    #main .gd-tab__label-full,
+    #main .ho-tab__label-full,
+    #main .ms-tab__label-full {
+        display: none !important;
+    }
+
+    #main .gd-tab__label-short,
+    #main .ho-tab__label-short,
+    #main .ms-tab__label-short {
+        display: inline !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+@media (max-width: 767.98px) {
+
+    .pg-diff,
+    .pg-summary,
+    .gd-diff,
+    .ho-diff,
+    .tk-summary,
+    .svc-actions-row {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* cliente-hosting.css los dejaba a dos columnas y ganaba por orden de
+       carga: con tres acciones el tercer botón quedaba huérfano. */
+    .ho-actions-row .ho-btn {
+        flex: 1 1 100% !important;
+    }
+}
+
+
+/* ==========================================================================
+   5. FORMULARIOS
+
+   Una columna, etiquetas visibles, campos a 16px para que Safari no amplíe
+   la página al enfocarlos.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* 16px es el mínimo que desactiva el zoom automático de iOS. Al ampliar,
+       el layout queda más ancho que la pantalla y el usuario acaba navegando
+       en horizontal. Se incluye el chat, que vive fuera de #main. */
+    #main input:not([type="checkbox"]):not([type="radio"]),
+    #main select,
+    #main textarea,
+    .modal input,
+    .modal select,
+    .modal textarea,
+    .swal2-container input,
+    .swal2-container select,
+    .swal2-container textarea,
+    .cw-chat-panel__input,
+    .tk-search__input,
+    .gd-search input,
+    .ho-search input,
+    .ms-search input,
+    .gd-dns-input,
+    .dataTables_filter input,
+    .dataTables_length select,
+    .form-control-sm,
+    .form-select-sm {
+        font-size: 16px !important;
+    }
+
+    /* Campos y controles a ancho completo, en una sola columna. */
+    #main .form-control,
+    #main .form-select,
+    #main textarea,
+    .modal .form-control,
+    .modal .form-select {
+        width: 100% !important;
+        min-height: var(--cwm-touch);
+    }
+
+    /* Las rejillas de formulario colapsan en todo el rango móvil, no solo
+       por debajo de 768px: los col-md-3 de cliente.php (N.º exterior,
+       interior, C.P., país) quedaban en cuatro columnas de ~180px. */
+    #main form .col-md-3,
+    #main form .col-md-4,
+    #main form .col-md-6,
+    #main form .col-sm-6,
+    .modal .col-md-3,
+    .modal .col-md-4,
+    .modal .col-md-6,
+    .modal .col-sm-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Separación vertical entre campos, ya que los gutters van a cero. */
+    #main form .row > [class^="col-"],
+    #main form .row > [class*=" col-"],
+    .modal .row > [class^="col-"],
+    .modal .row > [class*=" col-"] {
+        margin-bottom: var(--cwm-sp-3);
+    }
+
+    #main label,
+    .modal label,
+    #main .form-label,
+    .modal .form-label {
+        font-size: var(--cwm-fs-sm) !important;
+        margin-bottom: var(--cwm-sp-1);
+        display: block;
+    }
+
+    /* Dominios, hosting y mis sitios usan <label class="*-search"> con icono
+       + input en fila. display:block del bloque anterior rompía el flex y el
+       icono quedaba desfasado respecto al campo. */
+    #main label.gd-search,
+    #main label.ho-search,
+    #main label.ms-search,
+    #main label.tk-search {
+        display: flex !important;
+        align-items: center !important;
+        margin-bottom: 0 !important;
+        min-height: var(--cwm-touch);
+        padding-left: var(--cwm-sp-4) !important;
+        padding-right: var(--cwm-sp-4) !important;
+        gap: var(--cwm-sp-2);
+    }
+
+    #main .gd-search > i,
+    #main .ho-search > i,
+    #main .ms-search > i {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        font-size: 1rem;
+        line-height: 1;
+        color: #64748b;
+    }
+
+    #main .gd-search input,
+    #main .ho-search input,
+    #main .ms-search input {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+        line-height: 1.25;
+    }
+
+    /* Casillas y radios: eran de 13 a 18px, imposibles de acertar. */
+    #main input[type="checkbox"],
+    #main input[type="radio"],
+    .modal input[type="checkbox"],
+    .modal input[type="radio"] {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px;
+        flex-shrink: 0;
+    }
+
+    /* Botón de envío como acción principal, a ancho completo. */
+    #main form button[type="submit"]:not(.cw-chat-panel__send),
+    #main form input[type="submit"],
+    .modal .modal-footer .btn-primary {
+        width: 100% !important;
+        min-height: 48px !important;
+        font-size: var(--cwm-fs-md) !important;
+        font-weight: 600;
+    }
+}
+
+
+/* ==========================================================================
+   6. ÁREAS TÁCTILES
+
+   Mínimo 44px de alto en todo lo accionable.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    #main .btn,
+    #main .btn-action-view,
+    #main .btn-format,
+    #main .gd-empty-btn,
+    #main .ho-empty-btn,
+    #main .ms-empty-btn,
+    #main .pg-empty-btn,
+    #main .svc-btn,
+    #main .svc-btn--pay,
+    #main .svc-btn--modal,
+    #main .gd-modal-close,
+    #main .gd-btn-dns,
+    #main .gd-btn-transfer,
+    #main .ho-btn,
+    #main .pg-btn,
+    #main .tk-btn,
+    #main .tk-empty-link,
+    .modal .btn,
+    .swal2-actions .swal2-confirm,
+    .swal2-actions .swal2-cancel {
+        min-height: var(--cwm-touch) !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: var(--cwm-sp-2);
+    }
+
+    /* Botones pequeños de icono. */
+    #main .tk-search__clear,
+    #main .file-remove,
+    #main .pw-toggle,
+    #main .sidebar-hide,
+    .image-modal-close {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Los badges solo crecen cuando además son enlaces. */
+    #main a.domain-status,
+    #main a.ho-status,
+    #main .status-pending-payment--link {
+        min-height: 38px !important;
+        display: inline-flex !important;
+        align-items: center;
+        padding: var(--cwm-sp-2) var(--cwm-sp-3) !important;
+    }
+
+    /* Separación entre acciones contiguas para evitar toques accidentales. */
+    #main .btn-actions,
+    #main .svc-actions-row,
+    #main .ho-actions-row {
+        gap: var(--cwm-sp-2) !important;
+    }
+}
+
+
+/* ==========================================================================
+   7. MODALES Y TECLADO
+
+   En iOS 100vh no se reduce al abrir el teclado, así que los campos y los
+   botones quedan por debajo de él. Se usa dvh, que sí refleja el viewport
+   visible, con vh como reserva para navegadores antiguos.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    .modal-dialog {
+        margin: var(--cwm-sp-2) !important;
+        max-width: calc(100% - var(--cwm-sp-4)) !important;
+    }
+
+    .modal-body {
+        padding: var(--cwm-sp-4) !important;
+        max-height: 75vh;
+        max-height: 75dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-header,
+    .modal-footer {
+        padding: var(--cwm-sp-3) var(--cwm-sp-4) !important;
+    }
+
+    /* Acciones apiladas y alcanzables con el pulgar. */
+    .modal-footer {
+        flex-direction: column-reverse;
+        gap: var(--cwm-sp-2);
+    }
+
+    .modal-footer > .btn {
+        width: 100%;
+        margin: 0 !important;
+    }
+
+    /* SweetAlert2 y los contenedores con altura en vh. */
+    .swal2-popup {
+        width: 95% !important;
+        max-width: none !important;
+        padding: var(--cwm-sp-4) !important;
+    }
+
+    .swal2-html-container,
+    .swal-html-container,
+    .pago-modal {
+        max-height: 65vh;
+        max-height: 65dvh;
+    }
+
+    .swal2-actions {
+        flex-direction: column-reverse;
+        width: 100%;
+        gap: var(--cwm-sp-2);
+    }
+
+    .swal2-actions .swal2-confirm,
+    .swal2-actions .swal2-cancel {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* El panel de chat en móvil usa pantalla completa y visualViewport
+       (chat-widget.css + chat-widget.js). Estas reglas antiguas chocaban. */
+
+    /* El relleno del panel de gestión DNS sumaba 44px por lado sobre los del
+       propio modal, dejando el campo en unos 250px. */
+    .gd-manage-panel-inner,
+    .gd-manage-section {
+        padding: var(--cwm-sp-3) !important;
+    }
+}
+
+
+/* ==========================================================================
+   8. TABLAS
+
+   Dos estrategias según el caso, sin ocultar información en ninguna:
+   - pagos: DataTables con scrollX, la tabla conserva sus 9 columnas.
+   - heredadas: cliente-mobile.js las envuelve en .cw-tablewrap.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    .cw-tablewrap {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+    }
+
+    .cw-tablewrap > table {
+        margin-bottom: 0;
+    }
+
+    /* Indicio visual de que hay más columnas a la derecha. */
+    .cw-tablewrap.is-scrollable {
+        background-image: linear-gradient(to right, rgba(0, 1, 71, .10), rgba(0, 1, 71, 0) 24px);
+        background-repeat: no-repeat;
+        background-position: top right;
+        background-size: 24px 100%;
+    }
+
+    #main .cw-tablewrap th,
+    #main .cw-tablewrap td {
+        padding: var(--cwm-sp-2) var(--cwm-sp-3) !important;
+        font-size: var(--cwm-fs-xs) !important;
+        line-height: var(--cwm-lh-snug);
+    }
+
+    /* Un solo scroller: el que genera DataTables. */
+    .pg-datatable-wrap {
+        overflow-x: visible !important;
+    }
+
+    .dataTables_scrollBody {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+    }
+
+    /* Sin nowrap las 9 columnas se comprimen hasta caber y no hay nada que
+       desplazar; con él conservan su ancho y aparece el scroll. */
+    .pagos-datatable th,
+    .pagos-datatable td {
+        white-space: nowrap !important;
+    }
+
+    /* Descripción: el nowrap de arriba la aplastaba y, con filas altas por los
+       botones de acción, el texto quedaba desfasado respecto al resto. */
+    #main .pagos-datatable th.pg-desc-col,
+    #main .pagos-datatable td.pg-desc-cell {
+        white-space: normal !important;
+        vertical-align: top !important;
+        text-align: left !important;
+        min-width: 9.5rem;
+        max-width: 14rem;
+        line-height: 1.4;
+    }
+
+    #main .pagos-datatable tbody td {
+        vertical-align: top !important;
+    }
+
+    .dataTables_scrollHead,
+    .dataTables_scrollHeadInner,
+    .dataTables_scrollBody > table {
+        max-width: none !important;
+    }
+
+    .dataTables_filter,
+    .dataTables_filter label,
+    .dataTables_filter input {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    /* DataTables filter/length son <label> flex en pagos.css; #main label
+       los pasa a block y desalinea el icono de búsqueda del campo. */
+    #main .pagos-page .dataTables_filter label,
+    #main .pagos-page .dataTables_length label {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        margin-bottom: 0 !important;
+        gap: var(--cwm-sp-2);
+        width: 100%;
+    }
+
+    #main .pagos-page .dataTables_filter input {
+        flex: 1 1 auto;
+        min-width: 0 !important;
+        min-height: var(--cwm-touch);
+        padding: 0 var(--cwm-sp-4) 0 2.25rem !important;
+        margin-left: 0 !important;
+        background-position: var(--cwm-sp-3) center !important;
+        line-height: 1.25;
+    }
+}
+
+
+/* ==========================================================================
+   9. NAVEGACIÓN
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* El cajón ocupa la pantalla completa. El desplazamiento sigue siendo
+       por transform, así que la animación no cambia. */
+    #sidebar,
+    #sidebar .sidebar-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Enlaces del menú cómodos de pulsar. */
+    #sidebar .sidebar-link {
+        min-height: var(--cwm-touch);
+        display: flex;
+        align-items: center;
+        font-size: var(--cwm-fs-md);
+    }
+}
+
+
+/* ==========================================================================
+   10. PÁGINAS HEREDADAS (facturas, productos)
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* Pestañas de año con float dentro de .tab{overflow:hidden}: se
+       recortaban en lugar de envolverse. */
+    #main .tab {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: var(--cwm-sp-2);
+        overflow: visible !important;
+    }
+
+    #main .tab button {
+        float: none !important;
+        flex: 1 1 auto;
+        min-height: var(--cwm-touch);
+        font-size: var(--cwm-fs-sm);
+    }
+
+    #main .facant {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Regla global input[type=submit]{width:30%} de las páginas de facturas. */
+    #main input[type="submit"] {
+        width: 100% !important;
+        min-height: var(--cwm-touch);
+    }
+
+    /* Tamaños absolutos heredados que no escalaban. */
+    #main font[size="4"],
+    #main font[size="5"] {
+        font-size: var(--cwm-fs-md) !important;
+    }
+
+    #main .header h1 {
+        font-size: var(--cwm-fs-2xl) !important;
+    }
+}
+
+
+/* ==========================================================================
+   11. ZONA SEGURA (notch y barra gestual)
+
+   El viewport declara viewport-fit=cover, necesario para que el color de
+   fondo llegue hasta los filos y no quede una franja blanca bajo la barra
+   gestual. A cambio, el área útil deja de excluir el notch: hay que
+   reservarla a mano con env(safe-area-inset-*), o en horizontal el texto
+   se mete debajo de la muesca.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* En vertical los insets laterales valen 0, así que esto solo actúa al
+       girar el teléfono. Se aplica al contenedor, no a cada tarjeta, para
+       que las bandas a ancho completo sigan siéndolo. */
+    #main {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+
+    /* El hueco inferior del contenido lo fija la sección 14, que además debe
+       descontar el alto de la barra de navegación. */
+
+    #main > header.mb-3 {
+        padding-top: env(safe-area-inset-top) !important;
+    }
+
+    /* El botón flotante del chat se apoyaba justo sobre la barra gestual. */
+    .cw-chat-fab {
+        bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+    }
+
+    /* El cajón de navegación ocupa la pantalla completa: sus propios filos
+       necesitan el mismo respeto por la muesca. */
+    #sidebar .sidebar-wrapper {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+
+/* ==========================================================================
+   12. CABECERA FIJA
+
+   En una app la cabecera no se va con el scroll: el nombre de la sección y
+   el acceso al menú están siempre disponibles. Aquí se iba, y en las
+   páginas largas (pagos, facturas) había que subir del todo para abrir el
+   menú.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    #main > header.mb-3 {
+        position: sticky;
+        top: 0;
+        /* Por debajo del cajón (1050) y de su fondo oscuro, por encima de
+           las tarjetas y de las cabeceras fijas de DataTables. */
+        z-index: 100;
+        background: #f8f9fa;
+    }
+
+    .cw-topbar {
+        margin-bottom: 0 !important;
+    }
+
+    /* Sombra sutil solo cuando hay contenido desplazado por debajo, para
+       que la cabecera se despegue sin dibujar una línea permanente. */
+    #main > header.mb-3::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -12px;
+        height: 12px;
+        pointer-events: none;
+        background: linear-gradient(to bottom, rgba(15, 23, 42, .06), rgba(15, 23, 42, 0));
+    }
+}
+
+
+/* ==========================================================================
+   13. ACABADO TÁCTIL Y TIPOGRÁFICO
+
+   Detalles que separan una web adaptada de una app: sin destellos grises al
+   tocar, con respuesta inmediata al pulsar y sin reajustes de tamaño de
+   fuente por parte del navegador.
+   ========================================================================== */
+@media (max-width: 1199.98px) {
+
+    /* Android y iOS pintan un rectángulo gris translúcido sobre cualquier
+       enlace o botón tocado. Se sustituye por una respuesta propia. */
+    #main a,
+    #main button,
+    #main .btn,
+    #main [role="button"],
+    #sidebar a,
+    #sidebar button {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Realimentación al pulsar: leve hundimiento, como en una app nativa.
+       Solo en dispositivos táctiles, para no alterar el hover de ratón. */
+    #main .btn:active,
+    #main .svc-btn:active,
+    #main .ho-btn:active,
+    #main .pg-btn:active,
+    #main .tk-btn:active,
+    #main .gd-tab:active,
+    #main .ho-tab:active,
+    #main .ms-tab:active,
+    #main .ch-quick-card:active,
+    #main .ch-kpi__item:active,
+    #sidebar .sidebar-link:active {
+        transform: scale(.98);
+        transition: transform .06s ease-out;
+    }
+
+    /* Las tarjetas que son enlaces completos también responden. */
+    #main a.card-domain:active,
+    #main a.ch-alert:active {
+        filter: brightness(.98);
+    }
+}
+
+/* Fuera de media query: afectan al documento entero y no cambian el
+   escritorio, solo lo afinan. */
+html {
+    /* Safari agranda por su cuenta algunos bloques de texto al girar el
+       teléfono, descuadrando las tarjetas. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    #main *:active {
+        transform: none !important;
+    }
+}
+
+
+/* ==========================================================================
+   14. BARRA DE NAVEGACIÓN INFERIOR
+
+   El menú hamburguesa escondía toda la navegación tras dos toques. Aquí los
+   cuatro destinos frecuentes quedan siempre visibles y el quinto abre el
+   cajón con el resto (Dominios, Hosting, Mis datos, Chat, Cerrar sesión),
+   de modo que no se pierde acceso a nada.
+
+   El marcado vive en menu.php; en escritorio no se muestra.
+   ========================================================================== */
+.cw-tabbar {
+    display: none;
+}
+
+@media (max-width: 1199.98px) {
+
+    .cw-tabbar {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /* Sobre el contenido y la cabecera, pero bajo el cajón (1001) y su
+           fondo (999): al abrir el menú, la barra queda tapada por él. */
+        z-index: 300;
+        background: #fff;
+        border-top: 1px solid #e2e8f0;
+        /* La barra gestual del iPhone se apoya justo aquí. */
+        padding-bottom: env(safe-area-inset-bottom);
+        box-shadow: 0 -2px 12px rgba(15, 23, 42, .06);
+    }
+
+    .cw-tabbar__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        min-height: 56px;
+        padding: 6px 2px;
+        border: 0;
+        background: transparent;
+        color: var(--cwm-text-muted);
+        text-decoration: none;
+        font-size: 11px;
+        line-height: 1;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .cw-tabbar__icon {
+        position: relative;
+        display: inline-flex;
+        font-size: 19px;
+        line-height: 1;
+    }
+
+    .cw-tabbar__label {
+        font-weight: 600;
+        letter-spacing: .01em;
+    }
+
+    .cw-tabbar__item.is-active {
+        color: #000147;
+    }
+
+    /* Indicador superior de la pestaña activa, al estilo de una app. */
+    .cw-tabbar__item.is-active::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 28px;
+        height: 3px;
+        border-radius: 0 0 3px 3px;
+        background: #000147;
+    }
+
+    .cw-tabbar__item {
+        position: relative;
+    }
+
+    .cw-tabbar__item:active {
+        background: #f1f5f9;
+    }
+
+    /* Contador de pagos pendientes sobre el icono. */
+    .cw-tabbar__badge {
+        position: absolute;
+        top: -5px;
+        left: 11px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        border-radius: 8px;
+        background: #dc2626;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 16px;
+        text-align: center;
+    }
+
+    /* Hueco para que la barra no tape el final del contenido. Sustituye al
+       relleno inferior de la sección 11, que ya no basta. */
+    #main .page-content,
+    #main .main-content {
+        padding-bottom: calc(56px + var(--cwm-sp-4) + env(safe-area-inset-bottom)) !important;
+    }
+
+    /* El botón del chat se apoyaba en el borde inferior, justo donde ahora
+       está la barra. */
+    .cw-chat-fab {
+        bottom: calc(56px + 16px + env(safe-area-inset-bottom)) !important;
+    }
+}

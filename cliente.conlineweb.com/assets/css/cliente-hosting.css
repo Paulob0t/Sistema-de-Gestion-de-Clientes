@@ -1,0 +1,227 @@
+/* Portal clientes — Mi hosting (claridad UX) */
+
+.ho-page {
+    padding-bottom: 2rem;
+}
+
+.ho-diff {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+}
+
+.ho-diff__item {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.75rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.ho-diff__item strong {
+    font-size: 0.8rem;
+    color: #000147;
+}
+
+.ho-diff__item span {
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+.ho-pay-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    text-decoration: none !important;
+    color: #9a3412;
+    font-size: 0.9rem;
+}
+
+.ho-pay-strip:hover {
+    color: #7c2d12;
+}
+
+.ho-pay-strip__cta {
+    margin-left: auto;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.ho-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: stretch;
+    margin-bottom: 1.15rem;
+}
+
+.ho-page .ho-tabs {
+    flex: 1 1 320px;
+    margin-bottom: 0;
+}
+
+.ho-tab__label-short {
+    display: none;
+}
+
+.ho-search {
+    flex: 0 1 280px;
+    min-width: 180px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0 0.9rem;
+    color: #64748b;
+}
+
+.ho-search input {
+    border: 0;
+    outline: 0;
+    width: 100%;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    background: transparent;
+    color: #0f172a;
+}
+
+.ho-can-do {
+    margin: 0.4rem 0 0;
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+.ho-can-do--warn {
+    color: #c2410c;
+}
+
+.ho-can-do--muted {
+    color: #94a3b8;
+}
+
+.ho-status--link {
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.ho-status--link:hover {
+    filter: brightness(0.95);
+}
+
+.ho-creds-note {
+    margin: 0.75rem 0 0;
+    font-size: 0.8rem;
+    color: #64748b;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 0.55rem 0.7rem;
+}
+
+.ho-creds-note a {
+    font-weight: 700;
+    color: #000147;
+}
+
+.ho-dns-hint {
+    margin: 0.65rem 0 0;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.ho-dns-hint a {
+    font-weight: 700;
+    color: #000147;
+}
+
+.ho-empty-icon--success {
+    background: #ecfdf5 !important;
+    color: #10b981 !important;
+}
+
+.ho-empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.ho-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.86rem;
+    text-decoration: none !important;
+    background: #000147;
+    color: #fff;
+}
+
+.ho-empty-btn:hover {
+    background: #1a1a6e;
+    color: #fff;
+}
+
+.ho-empty-btn--ghost {
+    background: #fff;
+    color: #000147;
+    border: 1.5px solid #000147;
+}
+
+.ho-no-results {
+    text-align: center;
+    color: #64748b;
+    font-size: 0.9rem;
+    padding: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .ho-diff {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .ho-tab__label-full {
+        display: none;
+    }
+
+    .ho-tab__label-short {
+        display: inline;
+    }
+
+    .ho-toolbar {
+        flex-direction: column;
+    }
+
+    .ho-search {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .ho-pay-strip__cta {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .ho-actions-row .ho-btn {
+        flex: 1 1 calc(50% - 4px);
+    }
+}

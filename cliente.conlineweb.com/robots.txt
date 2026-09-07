@@ -1,0 +1,9 @@
+# cliente.conlineweb.com — portal privado. No indexar.
+User-agent: *
+Disallow: /
+
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
