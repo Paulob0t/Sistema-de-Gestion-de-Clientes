@@ -4,6 +4,9 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { dashboardApi, type DashboardResponse, type PagoItem } from '@/api/dashboard'
 
+import AppSidebar from '@/components/layout/AppSidebar.vue'
+
+const isMobileSidebarOpen = ref(false)
 const router = useRouter()
 const authStore = useAuthStore()
 
@@ -126,43 +129,61 @@ function showToast(msg: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0F172A] text-slate-100 selection:bg-blue-600 selection:text-white pb-16">
-    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
-    <header class="sticky top-0 z-30 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/80">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <!-- Logo y Nombre -->
-        <div class="flex items-center space-x-3.5">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-0.5 shadow-lg shadow-blue-600/20">
-            <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <i class="pi pi-bolt text-lg text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300"></i>
-            </div>
-          </div>
-          <div>
-            <div class="flex items-center space-x-2">
-              <span class="text-lg font-extrabold tracking-tight text-white">NEXUS<span class="text-blue-500">BOT</span></span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 uppercase tracking-wider">
-                CRM Enterprise
-              </span>
-            </div>
-            <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Gestión de Clientes, Dominios & Hosting</p>
-          </div>
-        </div>
+  <div class="min-h-screen bg-[#0F172A] text-slate-100 selection:bg-blue-600 selection:text-white flex overflow-x-hidden">
+    <!-- MENÚ LATERAL (SIDEBAR MIGRADO) -->
+    <AppSidebar
+      :is-mobile-open="isMobileSidebarOpen"
+      @close-mobile="isMobileSidebarOpen = false"
+    />
 
-        <!-- Switcher de Sistema y Perfil -->
-        <div class="flex items-center space-x-3 sm:space-x-4">
-          <!-- Selector ConlineWeb / HostingPro (Solo Admins) -->
-          <div v-if="!isClient" class="flex p-1 rounded-xl bg-slate-950/80 border border-slate-800">
+    <!-- CONTENEDOR PRINCIPAL CON SCROLL -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto pb-16">
+      <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+      <header class="sticky top-0 z-30 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/80 h-16 shrink-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+          <!-- Botón Menú Móvil y Título -->
+          <div class="flex items-center space-x-3">
             <button
-              @click="currentSistema = 'conlineweb'"
-              :class="[
-                'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200',
-                currentSistema === 'conlineweb'
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-                  : 'text-slate-400 hover:text-white'
-              ]"
+              @click="isMobileSidebarOpen = true"
+              class="lg:hidden p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+              title="Abrir menú"
             >
-              ConlineWeb
+              <i class="pi pi-bars text-base"></i>
             </button>
+            <div class="hidden sm:flex items-center space-x-2">
+              <span class="text-sm font-bold text-white">Panel Principal</span>
+              <span class="text-slate-600">•</span>
+              <span class="text-xs text-blue-400 font-semibold uppercase tracking-wider">{{ currentSistema }}</span>
+            </div>
+          </div>
+
+          <!-- Switcher de Sistema y Perfil -->
+          <div class="flex items-center space-x-3 sm:space-x-4">
+            <!-- Selector ConlineWeb / HostingPro (Solo Admins) -->
+            <div v-if="!isClient" class="flex p-1 rounded-xl bg-slate-950/80 border border-slate-800">
+              <button
+                @click="currentSistema = 'conlineweb'"
+                :class="[
+                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200',
+                  currentSistema === 'conlineweb'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                    : 'text-slate-400 hover:text-white'
+                ]"
+              >
+                ConlineWeb
+              </button>
+              <button
+                @click="currentSistema = 'hostingpro'"
+                :class="[
+                  'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200',
+                  currentSistema === 'hostingpro'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                    : 'text-slate-400 hover:text-white'
+                ]"
+              >
+                HostingPro
+              </button>
+            </div>
             <button
               @click="currentSistema = 'hostingpro'"
               :class="[
@@ -191,8 +212,7 @@ function showToast(msg: string) {
             </button>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
 
     <!-- NOTIFICACIÓN TOAST -->
     <transition name="fade">
@@ -646,6 +666,7 @@ function showToast(msg: string) {
         </div>
       </div>
     </main>
+    </div>
   </div>
 </template>
 
