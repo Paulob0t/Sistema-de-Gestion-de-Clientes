@@ -25,7 +25,7 @@ function handleLogout() {
             <i class="pi pi-bolt text-lg"></i>
           </div>
           <div>
-            <h1 class="text-lg font-bold text-slate-900 leading-tight">NEXUS<span class="text-blue-600">CORE</span></h1>
+            <h1 class="text-lg font-bold text-slate-900 leading-tight">NEXUS<span class="text-blue-600">BOT</span></h1>
             <p class="text-xs text-slate-500">Enterprise Cloud & CRM Suite</p>
           </div>
         </div>

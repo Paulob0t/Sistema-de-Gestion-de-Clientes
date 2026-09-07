@@ -65,7 +65,7 @@ async function handleLogin() {
           </div>
           <div>
             <span class="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
-              NEXUS<span class="text-blue-500">CORE</span>
+              NEXUS<span class="text-blue-500">BOT</span>
             </span>
             <span class="block text-[11px] font-semibold tracking-widest text-slate-400 uppercase">
               Enterprise Cloud & CRM Suite
@@ -120,7 +120,7 @@ async function handleLogin() {
 
       <!-- Footer Izquierdo -->
       <div class="flex items-center justify-between text-xs text-slate-500 pt-6 border-t border-slate-800/60">
-        <span>© 2026 NexusCore Enterprise. Todos los derechos reservados.</span>
+        <span>© 2026 NexusBot Enterprise. Todos los derechos reservados.</span>
         <span class="flex items-center space-x-1">
           <i class="pi pi-shield text-emerald-400"></i>
           <span class="text-slate-400 font-medium">Seguridad Activa</span>
@@ -139,7 +139,7 @@ async function handleLogin() {
             </div>
           </div>
           <div>
-            <span class="text-xl font-bold text-white">NEXUS<span class="text-blue-500">CORE</span></span>
+            <span class="text-xl font-bold text-white">NEXUS<span class="text-blue-500">BOT</span></span>
             <span class="block text-[10px] text-slate-400">Enterprise CRM</span>
           </div>
         </div>

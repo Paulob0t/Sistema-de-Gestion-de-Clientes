@@ -4,8 +4,8 @@ from app.core.config import settings
 from app.api.v1.api import api_router
 
 app = FastAPI(
-    title="ConlineWeb CRM API",
-    description="Backend API moderno para Gestión de Clientes, Dominios, Hosting y Tickets (Migración FastAPI)",
+    title="NexusBot Enterprise CRM API",
+    description="Backend API moderno para Gestión de Clientes, Dominios, Hosting y Tickets (FastAPI + SQLAlchemy)",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
