@@ -25,6 +25,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/dominios',
+    name: 'dominios',
+    component: () => import('@/views/DominiosView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/portal/clientes',
     name: 'portal-clientes',
     component: () => import('@/views/DashboardView.vue'),
