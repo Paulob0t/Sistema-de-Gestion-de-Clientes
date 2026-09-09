@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useClientes } from '@/composables/useClientes'
 import { useToast } from '@/composables/useToast'
@@ -13,6 +14,7 @@ import ClienteCardGrid from '@/components/clientes/ClienteCardGrid.vue'
 import ClienteDetailModal from '@/components/clientes/ClienteDetailModal.vue'
 import ClienteFormModal from '@/components/clientes/ClienteFormModal.vue'
 
+const router = useRouter()
 const authStore = useAuthStore()
 const { showToast } = useToast()
 
@@ -161,6 +163,11 @@ async function handleSaveClient() {
   }
 }
 
+function handleLogout() {
+  authStore.logout()
+  router.push('/login')
+}
+
 onMounted(() => {
   loadClientes()
 })
@@ -224,6 +231,15 @@ onMounted(() => {
             >
               <i class="pi pi-plus text-xs"></i>
               <span>Nuevo Cliente</span>
+            </button>
+
+            <!-- Botón Salir / Logout -->
+            <button
+              @click="handleLogout"
+              class="p-2 rounded-xl bg-slate-800/80 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 border border-slate-700/60 transition-colors"
+              title="Cerrar sesión"
+            >
+              <i class="pi pi-sign-out text-sm"></i>
             </button>
           </div>
         </div>

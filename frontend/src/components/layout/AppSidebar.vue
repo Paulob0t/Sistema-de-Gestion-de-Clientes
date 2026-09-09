@@ -43,6 +43,12 @@ function handleNavigation(path: string) {
   emit('close-mobile')
   router.push(path)
 }
+
+function handleLogout() {
+  emit('close-mobile')
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -191,10 +197,15 @@ function handleNavigation(path: string) {
                 <span class="truncate">Consulta de Clientes</span>
               </button>
               <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                @click="handleNavigation('/dominios')"
+                :class="[
+                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                  route.path === '/dominios'
+                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                ]"
               >
-                <i class="pi pi-globe text-slate-500 text-xs"></i>
+                <i class="pi pi-globe text-xs" :class="route.path === '/dominios' ? 'text-blue-400' : 'text-slate-500'"></i>
                 <span class="truncate">Consulta de Dominios</span>
               </button>
               <button
@@ -353,12 +364,12 @@ function handleNavigation(path: string) {
         </template>
       </div>
 
-      <!-- Footer: Usuario Conectado -->
+      <!-- Footer: Usuario Conectado & Logout -->
       <div class="p-3 border-t border-slate-800/60 bg-[#0A0F1D]/80 shrink-0">
         <div
           :class="[
             'p-2 rounded-xl bg-slate-900/60 border border-slate-800/70 flex items-center overflow-hidden',
-            isCollapsed ? 'justify-center' : 'justify-between space-x-2'
+            isCollapsed ? 'justify-center flex-col space-y-2' : 'justify-between space-x-2'
           ]"
         >
           <div class="flex items-center space-x-2.5 overflow-hidden">
@@ -366,13 +377,21 @@ function handleNavigation(path: string) {
               {{ (user?.nombre || user?.usuario || 'U').charAt(0).toUpperCase() }}
             </div>
             <div v-show="!isCollapsed" class="overflow-hidden">
-              <div class="text-xs font-semibold text-white truncate max-w-[130px]">{{ user?.nombre || user?.usuario }}</div>
+              <div class="text-xs font-semibold text-white truncate max-w-[110px]">{{ user?.nombre || user?.usuario }}</div>
               <div class="text-[10px] text-emerald-400 font-medium flex items-center space-x-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                 <span>En línea</span>
               </div>
             </div>
           </div>
+
+          <button
+            @click="handleLogout"
+            class="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/15 flex items-center justify-center transition-all duration-150 shrink-0 group"
+            :title="'Cerrar sesión'"
+          >
+            <i class="pi pi-sign-out text-xs group-hover:scale-110 transition-transform"></i>
+          </button>
         </div>
       </div>
     </aside>
