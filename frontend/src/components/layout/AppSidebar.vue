@@ -147,10 +147,15 @@ function handleNavigation(path: string) {
 
             <div v-show="openModules.consultas" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
               <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
+                @click="handleNavigation('/clientes')"
+                :class="[
+                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                  route.path === '/clientes'
+                    ? 'bg-blue-600/20 text-blue-400 font-bold border border-blue-500/30'
+                    : 'text-slate-300 hover:bg-slate-800/60 hover:text-white'
+                ]"
               >
-                <i class="pi pi-building text-slate-400 text-xs"></i>
+                <i class="pi pi-building text-xs" :class="route.path === '/clientes' ? 'text-blue-400' : 'text-slate-400'"></i>
                 <span>Consulta de Clientes</span>
               </button>
               <button

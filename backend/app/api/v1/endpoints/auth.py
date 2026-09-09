@@ -49,7 +49,11 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    user = db.query(Login).filter(Login.id == int(user_id)).first()
+    if str(user_id).isdigit():
+        user = db.query(Login).filter(Login.id == int(user_id)).first()
+    else:
+        user = db.query(Login).filter(Login.usuario == str(user_id)).first()
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
