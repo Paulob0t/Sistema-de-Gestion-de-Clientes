@@ -114,7 +114,7 @@ const maxTrendAmount = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0F172A] text-slate-100 selection:bg-blue-600 selection:text-white flex overflow-x-hidden">
+  <div class="h-screen w-screen bg-[#0F172A] text-slate-100 selection:bg-blue-600 selection:text-white flex overflow-hidden">
     <!-- MENÚ LATERAL -->
     <AppSidebar
       :is-mobile-open="isMobileSidebarOpen"
@@ -122,7 +122,7 @@ const maxTrendAmount = computed(() => {
     />
 
     <!-- CONTENEDOR PRINCIPAL -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto pb-16">
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto pb-16">
       <!-- HEADER SUPERIOR -->
       <header class="sticky top-0 z-30 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800/80 h-16 shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">

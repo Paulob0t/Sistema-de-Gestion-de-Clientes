@@ -19,6 +19,9 @@ const user = computed(() => authStore.user)
 const isSuperAdmin = computed(() => authStore.isSuperAdmin || (user.value?.id_tipo_usuario ?? 0) >= 1)
 const isClient = computed(() => authStore.isCliente)
 
+// Estado colapsado / expandido adaptativo en escritorio
+const isCollapsed = ref(false)
+
 // Estados para módulos colapsables del menú
 const openModules = ref<Record<string, boolean>>({
   consultas: true,
@@ -30,98 +33,124 @@ const openModules = ref<Record<string, boolean>>({
 })
 
 function toggleModule(modKey: string) {
+  if (isCollapsed.value) {
+    isCollapsed.value = false
+  }
   openModules.value[modKey] = !openModules.value[modKey]
 }
 
 function handleNavigation(path: string) {
   emit('close-mobile')
-  if (path === '/dashboard') {
-    router.push('/dashboard')
-  } else {
-    router.push(path)
-  }
+  router.push(path)
 }
 </script>
 
 <template>
   <div>
-    <!-- Overlay móvil -->
-    <div
-      v-if="isMobileOpen"
-      @click="emit('close-mobile')"
-      class="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm lg:hidden transition-opacity"
-    ></div>
+    <!-- Overlay móvil con Teleport para desacoplarlo del flex layout -->
+    <Teleport to="body">
+      <transition name="fade">
+        <div
+          v-if="isMobileOpen"
+          @click="emit('close-mobile')"
+          class="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm lg:hidden"
+        ></div>
+      </transition>
+    </Teleport>
 
-    <!-- Menú Lateral -->
+    <!-- Menú Lateral Fijo y Adaptativo -->
     <aside
       :class="[
-        'fixed top-0 bottom-0 left-0 z-50 w-72 bg-[#0B0F19] text-slate-300 border-r border-slate-800/80 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto shrink-0 select-none shadow-2xl',
-        isMobileOpen ? 'translate-x-0' : '-translate-x-full'
+        'fixed inset-y-0 left-0 z-50 bg-[#0B0F19] text-slate-300 border-r border-slate-800/80 flex flex-col transition-all duration-300 ease-in-out lg:static lg:h-screen lg:sticky lg:top-0 shrink-0 select-none shadow-2xl overflow-hidden',
+        isCollapsed ? 'lg:w-20' : 'lg:w-72',
+        isMobileOpen ? 'translate-x-0 w-72' : '-translate-x-full lg:translate-x-0'
       ]"
     >
       <!-- Cabecera / Marca -->
-      <div class="h-16 px-5 border-b border-slate-800/80 flex items-center justify-between shrink-0 bg-slate-950/50">
-        <div class="flex items-center space-x-3 cursor-pointer" @click="handleNavigation('/dashboard')">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-0.5 shadow-md shadow-blue-500/20">
+      <div class="h-16 px-4 border-b border-slate-800/80 flex items-center justify-between shrink-0 bg-slate-950/50">
+        <div
+          class="flex items-center space-x-3 cursor-pointer overflow-hidden"
+          @click="handleNavigation('/dashboard')"
+        >
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-0.5 shadow-md shadow-blue-500/20 shrink-0">
             <div class="w-full h-full bg-slate-950 rounded-[9px] flex items-center justify-center">
               <i class="pi pi-bolt text-base text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300"></i>
             </div>
           </div>
-          <div>
+          <div v-show="!isCollapsed" class="min-w-0 transition-opacity duration-200">
             <span class="text-base font-extrabold tracking-tight text-white">NEXUS<span class="text-blue-500">BOT</span></span>
             <span class="block text-[9px] font-semibold tracking-wider text-slate-400 uppercase">Enterprise CRM</span>
           </div>
         </div>
 
-        <!-- Botón cerrar en móvil -->
-        <button
-          @click="emit('close-mobile')"
-          class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-        >
-          <i class="pi pi-times text-sm"></i>
-        </button>
+        <!-- Botones: Colapsar en escritorio y Cerrar en móvil -->
+        <div class="flex items-center space-x-1">
+          <button
+            @click="isCollapsed = !isCollapsed"
+            class="hidden lg:flex p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors"
+            :title="isCollapsed ? 'Expandir menú' : 'Colapsar menú'"
+          >
+            <i :class="isCollapsed ? 'pi pi-chevron-right text-xs' : 'pi pi-chevron-left text-xs'"></i>
+          </button>
+          <button
+            @click="emit('close-mobile')"
+            class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          >
+            <i class="pi pi-times text-sm"></i>
+          </button>
+        </div>
       </div>
 
       <!-- Área con Scroll de los Módulos -->
-      <div class="flex-1 overflow-y-auto px-3.5 py-4 space-y-5 custom-scrollbar">
+      <div class="flex-1 overflow-y-auto px-3 py-4 space-y-4 custom-scrollbar overflow-x-hidden">
         <!-- Dashboard Principal (Acceso Directo) -->
         <div>
           <button
             @click="handleNavigation('/dashboard')"
             :class="[
-              'w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 group relative',
+              'w-full flex items-center rounded-xl text-xs font-semibold transition-all duration-200 group relative',
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3.5 py-2.5',
               route.path === '/dashboard'
                 ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 font-bold'
                 : 'text-slate-300 hover:bg-slate-800/60 hover:text-white'
             ]"
+            :title="isCollapsed ? 'Dashboard Principal' : undefined"
           >
             <div
               v-if="route.path === '/dashboard'"
               class="absolute left-0 top-2 bottom-2 w-1 bg-blue-500 rounded-r"
             ></div>
-            <i class="pi pi-th-large text-sm text-blue-400 group-hover:scale-110 transition-transform"></i>
-            <span>Dashboard Principal</span>
+            <i class="pi pi-th-large text-sm text-blue-400 group-hover:scale-110 transition-transform shrink-0"></i>
+            <span v-show="!isCollapsed" class="truncate">Dashboard Principal</span>
           </button>
         </div>
 
         <!-- SECCIÓN: CLIENTES / PORTAL (Solo si es Cliente) -->
         <div v-if="isClient" class="space-y-1">
-          <div class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+          <div v-show="!isCollapsed" class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
             Mi Cuenta
           </div>
           <button
             @click="handleNavigation('/dashboard')"
-            class="w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white"
+            :class="[
+              'w-full flex items-center rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white',
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3.5 py-2'
+            ]"
+            :title="isCollapsed ? 'Mis Dominios & Hosting' : undefined"
           >
-            <i class="pi pi-globe text-sm text-cyan-400"></i>
-            <span>Mis Dominios & Hosting</span>
+            <i class="pi pi-globe text-sm text-cyan-400 shrink-0"></i>
+            <span v-show="!isCollapsed" class="truncate">Mis Dominios & Hosting</span>
           </button>
           <button
             @click="handleNavigation('/dashboard')"
-            class="w-full flex items-center space-x-3 px-3.5 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white"
+            :class="[
+              'w-full flex items-center rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800/60 hover:text-white',
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3.5 py-2'
+            ]"
+            :title="isCollapsed ? 'Mis Pagos & Facturas' : undefined"
           >
-            <i class="pi pi-credit-card text-sm text-emerald-400"></i>
-            <span>Mis Pagos & Facturas</span>
+            <i class="pi pi-credit-card text-sm text-emerald-400 shrink-0"></i>
+            <span v-show="!isCollapsed" class="truncate">Mis Pagos & Facturas</span>
           </button>
         </div>
 
@@ -131,21 +160,26 @@ function handleNavigation(path: string) {
           <div class="space-y-1">
             <button
               @click="toggleModule('consultas')"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group"
+              :class="[
+                'w-full flex items-center rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group',
+                isCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2'
+              ]"
+              :title="isCollapsed ? 'Consultas' : undefined"
             >
               <div class="flex items-center space-x-2.5">
-                <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                <span class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0">
                   <i class="pi pi-search text-xs"></i>
                 </span>
-                <span class="uppercase tracking-wider text-[11px] font-bold">Consultas</span>
+                <span v-show="!isCollapsed" class="uppercase tracking-wider text-[11px] font-bold">Consultas</span>
               </div>
               <i
+                v-show="!isCollapsed"
                 class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.consultas }"
               ></i>
             </button>
 
-            <div v-show="openModules.consultas" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
+            <div v-show="openModules.consultas && !isCollapsed" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
               <button
                 @click="handleNavigation('/clientes')"
                 :class="[
@@ -156,28 +190,28 @@ function handleNavigation(path: string) {
                 ]"
               >
                 <i class="pi pi-building text-xs" :class="route.path === '/clientes' ? 'text-blue-400' : 'text-slate-400'"></i>
-                <span>Consulta de Clientes</span>
+                <span class="truncate">Consulta de Clientes</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
                 <i class="pi pi-globe text-slate-400 text-xs"></i>
-                <span>Consulta de Dominios</span>
+                <span class="truncate">Consulta de Dominios</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
                 <i class="pi pi-server text-slate-400 text-xs"></i>
-                <span>Consulta de Hosting</span>
+                <span class="truncate">Consulta de Hosting</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
                 <i class="pi pi-credit-card text-slate-400 text-xs"></i>
-                <span>Consulta de Pagos</span>
+                <span class="truncate">Consulta de Pagos</span>
               </button>
             </div>
           </div>
@@ -186,213 +220,135 @@ function handleNavigation(path: string) {
           <div class="space-y-1">
             <button
               @click="toggleModule('registros')"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group"
+              :class="[
+                'w-full flex items-center rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group',
+                isCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2'
+              ]"
+              :title="isCollapsed ? 'Registros' : undefined"
             >
               <div class="flex items-center space-x-2.5">
-                <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                  <i class="pi pi-plus-circle text-xs"></i>
+                <span class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                  <i class="pi pi-plus text-xs"></i>
                 </span>
-                <span class="uppercase tracking-wider text-[11px] font-bold">Registros</span>
+                <span v-show="!isCollapsed" class="uppercase tracking-wider text-[11px] font-bold">Registros</span>
               </div>
               <i
+                v-show="!isCollapsed"
                 class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.registros }"
               ></i>
             </button>
 
-            <div v-show="openModules.registros" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
+            <div v-show="openModules.registros && !isCollapsed" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
               <button
-                @click="handleNavigation('/dashboard')"
+                @click="handleNavigation('/clientes')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
                 <i class="pi pi-user-plus text-slate-400 text-xs"></i>
-                <span>Registro de Cliente</span>
+                <span class="truncate">Nuevo Cliente</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
-                <i class="pi pi-globe text-slate-400 text-xs"></i>
-                <span>Registro de Dominio</span>
+                <i class="pi pi-link text-slate-400 text-xs"></i>
+                <span class="truncate">Asignar Dominio</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
-                <i class="pi pi-cloud-upload text-slate-400 text-xs"></i>
-                <span>Registro de Hosting</span>
+                <i class="pi pi-database text-slate-400 text-xs"></i>
+                <span class="truncate">Asignar Hosting</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
-                <i class="pi pi-folder-plus text-slate-400 text-xs"></i>
-                <span>Formulario Proyectos</span>
+                <i class="pi pi-dollar text-slate-400 text-xs"></i>
+                <span class="truncate">Registrar Pago</span>
               </button>
             </div>
           </div>
 
-          <!-- 3. MÓDULO: COMUNICACIÓN & LEADS -->
+          <!-- 3. MÓDULO: COMUNICACIÓN & CRM -->
           <div class="space-y-1">
             <button
               @click="toggleModule('comunicacion')"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group"
+              :class="[
+                'w-full flex items-center rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group',
+                isCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2'
+              ]"
+              :title="isCollapsed ? 'Comunicación' : undefined"
             >
               <div class="flex items-center space-x-2.5">
-                <span class="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
-                  <i class="pi pi-comments text-xs"></i>
+                <span class="w-6 h-6 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center shrink-0">
+                  <i class="pi pi-send text-xs"></i>
                 </span>
-                <span class="uppercase tracking-wider text-[11px] font-bold">Comunicación</span>
+                <span v-show="!isCollapsed" class="uppercase tracking-wider text-[11px] font-bold">Comunicación</span>
               </div>
               <i
+                v-show="!isCollapsed"
                 class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.comunicacion }"
               ></i>
             </button>
 
-            <div v-show="openModules.comunicacion" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
+            <div v-show="openModules.comunicacion && !isCollapsed" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
-                <i class="pi pi-inbox text-slate-400 text-xs"></i>
-                <span>Bandeja CRM</span>
+                <i class="pi pi-envelope text-slate-400 text-xs"></i>
+                <span class="truncate">Recordatorios Correo</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
-                <i class="pi pi-table text-slate-400 text-xs"></i>
-                <span>Pipeline Kanban</span>
-              </button>
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
-              >
-                <i class="pi pi-whatsapp text-emerald-400 text-xs"></i>
-                <span>WhatsApp Chats</span>
-              </button>
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
-              >
-                <i class="pi pi-robot text-cyan-400 text-xs"></i>
-                <span>Chatbot & FAQ</span>
+                <i class="pi pi-whatsapp text-slate-400 text-xs"></i>
+                <span class="truncate">WhatsApp CRM Web</span>
               </button>
             </div>
           </div>
 
-          <!-- 4. MÓDULO: SOPORTE & TICKETS -->
-          <div class="space-y-1">
-            <button
-              @click="toggleModule('soporte')"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group"
-            >
-              <div class="flex items-center space-x-2.5">
-                <span class="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
-                  <i class="pi pi-ticket text-xs"></i>
-                </span>
-                <span class="uppercase tracking-wider text-[11px] font-bold">Soporte</span>
-              </div>
-              <i
-                class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
-                :class="{ '-rotate-90': !openModules.soporte }"
-              ></i>
-            </button>
-
-            <div v-show="openModules.soporte" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
-              >
-                <i class="pi pi-list text-slate-400 text-xs"></i>
-                <span>Tickets de Soporte</span>
-              </button>
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
-              >
-                <i class="pi pi-file-edit text-slate-400 text-xs"></i>
-                <span>Cotizaciones</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- 5. MÓDULO: ANALÍTICA & WEB -->
+          <!-- 4. MÓDULO: ANALÍTICA & REPORTES -->
           <div class="space-y-1">
             <button
               @click="toggleModule('analytics')"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group"
+              :class="[
+                'w-full flex items-center rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group',
+                isCollapsed ? 'justify-center p-3' : 'justify-between px-3 py-2'
+              ]"
+              :title="isCollapsed ? 'Analítica' : undefined"
             >
               <div class="flex items-center space-x-2.5">
-                <span class="w-6 h-6 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                  <i class="pi pi-chart-line text-xs"></i>
+                <span class="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                  <i class="pi pi-chart-pie text-xs"></i>
                 </span>
-                <span class="uppercase tracking-wider text-[11px] font-bold">Analítica & Web</span>
+                <span v-show="!isCollapsed" class="uppercase tracking-wider text-[11px] font-bold">Analítica</span>
               </div>
               <i
+                v-show="!isCollapsed"
                 class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.analytics }"
               ></i>
             </button>
 
-            <div v-show="openModules.analytics" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
+            <div v-show="openModules.analytics && !isCollapsed" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
-                <i class="pi pi-chart-bar text-slate-400 text-xs"></i>
-                <span>Dashboard Analítico</span>
+                <i class="pi pi-chart-line text-slate-400 text-xs"></i>
+                <span class="truncate">Reporte de Ingresos</span>
               </button>
               <button
                 @click="handleNavigation('/dashboard')"
                 class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
               >
-                <i class="pi pi-filter text-slate-400 text-xs"></i>
-                <span>Funnel Comercial</span>
-              </button>
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
-              >
-                <i class="pi pi-list-check text-slate-400 text-xs"></i>
-                <span>Auditoría SEO</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- 6. MÓDULO: SEGURIDAD & SISTEMA -->
-          <div class="space-y-1">
-            <button
-              @click="toggleModule('seguridad')"
-              class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition-colors group"
-            >
-              <div class="flex items-center space-x-2.5">
-                <span class="w-6 h-6 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center">
-                  <i class="pi pi-shield text-xs"></i>
-                </span>
-                <span class="uppercase tracking-wider text-[11px] font-bold">Seguridad</span>
-              </div>
-              <i
-                class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
-                :class="{ '-rotate-90': !openModules.seguridad }"
-              ></i>
-            </button>
-
-            <div v-show="openModules.seguridad" class="space-y-0.5 pl-3 pt-1 border-l border-slate-800/80 ml-4">
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
-              >
-                <i class="pi pi-lock text-slate-400 text-xs"></i>
-                <span>Control de Accesos</span>
-              </button>
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-300 hover:bg-slate-800/60 hover:text-white transition-colors"
-              >
-                <i class="pi pi-sliders-h text-slate-400 text-xs"></i>
-                <span>Planes HostingPro</span>
+                <i class="pi pi-calendar-times text-slate-400 text-xs"></i>
+                <span class="truncate">Vencimientos Próximos</span>
               </button>
             </div>
           </div>
@@ -400,14 +356,19 @@ function handleNavigation(path: string) {
       </div>
 
       <!-- Footer del Sidebar: Usuario Conectado -->
-      <div class="p-3.5 border-t border-slate-800/80 bg-slate-950/70 shrink-0">
-        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800/80 flex items-center justify-between">
-          <div class="flex items-center space-x-3 overflow-hidden">
+      <div class="p-3 border-t border-slate-800/80 bg-slate-950/70 shrink-0">
+        <div
+          :class="[
+            'p-2 rounded-xl bg-slate-900/90 border border-slate-800/80 flex items-center overflow-hidden transition-all',
+            isCollapsed ? 'justify-center' : 'justify-between space-x-2'
+          ]"
+        >
+          <div class="flex items-center space-x-2.5 overflow-hidden">
             <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-md">
               {{ (user?.nombre || user?.usuario || 'U').charAt(0).toUpperCase() }}
             </div>
-            <div class="overflow-hidden">
-              <div class="text-xs font-semibold text-white truncate">{{ user?.nombre || user?.usuario }}</div>
+            <div v-show="!isCollapsed" class="overflow-hidden">
+              <div class="text-xs font-semibold text-white truncate max-w-[130px]">{{ user?.nombre || user?.usuario }}</div>
               <div class="text-[10px] text-emerald-400 font-medium flex items-center space-x-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                 <span>En línea</span>
