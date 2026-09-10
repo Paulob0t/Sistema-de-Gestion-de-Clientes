@@ -41,6 +41,16 @@ const routes = [
     redirect: '/hostings'
   },
   {
+    path: '/pagos',
+    name: 'pagos',
+    component: () => import('@/views/PagosView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/pago',
+    redirect: '/pagos'
+  },
+  {
     path: '/portal/clientes',
     name: 'portal-clientes',
     component: () => import('@/views/DashboardView.vue'),

@@ -146,10 +146,11 @@ function handleLogout() {
             <span v-show="!isCollapsed" class="truncate">Mis Dominios & Hosting</span>
           </button>
           <button
-            @click="handleNavigation('/dashboard')"
+            @click="handleNavigation('/pagos')"
             :class="[
               'w-full flex items-center rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-900 hover:text-white transition-colors',
-              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2'
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
+              route.path.startsWith('/pago') ? 'bg-blue-600/15 text-blue-400 font-bold' : ''
             ]"
             :title="isCollapsed ? 'Mis Pagos & Facturas' : undefined"
           >
@@ -221,10 +222,15 @@ function handleLogout() {
                 <span class="truncate">Consulta de Hosting</span>
               </button>
               <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                @click="handleNavigation('/pagos')"
+                :class="[
+                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                  route.path.startsWith('/pago')
+                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                ]"
               >
-                <i class="pi pi-credit-card text-slate-500 text-xs"></i>
+                <i class="pi pi-credit-card text-xs" :class="route.path.startsWith('/pago') ? 'text-blue-400' : 'text-slate-500'"></i>
                 <span class="truncate">Consulta de Pagos</span>
               </button>
             </div>
