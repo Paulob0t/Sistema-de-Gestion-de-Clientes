@@ -261,10 +261,15 @@ function handleLogout() {
 
             <div v-show="openModules.registros && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
               <button
-                @click="handleNavigation('/clientes')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                @click="handleNavigation('/clientes/nuevo')"
+                :class="[
+                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                  route.path === '/clientes/nuevo'
+                    ? 'bg-emerald-600/15 text-emerald-400 font-bold border-l-2 border-emerald-500'
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                ]"
               >
-                <i class="pi pi-user-plus text-slate-500 text-xs"></i>
+                <i class="pi pi-user-plus text-xs" :class="route.path === '/clientes/nuevo' ? 'text-emerald-400' : 'text-slate-500'"></i>
                 <span class="truncate">Nuevo Cliente</span>
               </button>
               <button

@@ -105,6 +105,8 @@ export interface ClientePayload {
   estado?: string | null
   ciudad?: string | null
   especificacion?: string | null
+  facturacion?: number
+  contrasena?: string | null
 }
 
 export const clientesApi = {

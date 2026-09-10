@@ -22,6 +22,8 @@ from app.models.cliente import Cliente
 from app.models.dominio import Dominio
 from app.models.hosting import Hosting
 from app.models.pago import Pago
+from app.models.login import Login
+import hashlib
 
 router = APIRouter()
 
@@ -321,22 +323,42 @@ def create_cliente(
     current_user: UserProfile = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if current_user.id_tipo_usuario == 0:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Solo administradores pueden registrar nuevos clientes",
+        )
+
+    # Validar correo único si se proporciona
+    if payload.correo and payload.correo.strip():
+        correo_clean = payload.correo.strip().lower()
+        existente = db.query(Login).filter(Login.usuario == correo_clean).first()
+        if existente:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"El correo '{correo_clean}' ya se encuentra registrado como usuario en el sistema",
+            )
+    else:
+        correo_clean = None
+
     nuevo_cliente = Cliente(
-        empresa=payload.empresa,
-        nombre_contacto=payload.nombre_contacto,
-        correo=payload.correo,
-        telefono=payload.telefono,
-        rfc=payload.rfc,
-        rsocial=payload.rsocial,
-        calle=payload.calle,
-        next=payload.next,
-        nint=payload.nint,
-        col=payload.col,
-        cp=payload.cp,
+        empresa=payload.empresa.strip(),
+        nombre_contacto=payload.nombre_contacto.strip(),
+        correo=correo_clean,
+        telefono=payload.telefono.strip() if payload.telefono else None,
+        rfc=payload.rfc.strip().upper() if payload.rfc else None,
+        rsocial=payload.rsocial.strip() if payload.rsocial else None,
+        calle=payload.calle.strip() if payload.calle else None,
+        next=payload.next.strip() if payload.next else None,
+        nint=payload.nint.strip() if payload.nint else None,
+        col=payload.col.strip() if payload.col else None,
+        cp=payload.cp.strip() if payload.cp else None,
         pais=payload.pais or "México",
-        estado=payload.estado,
-        ciudad=payload.ciudad,
-        especificacion=payload.especificacion,
+        estado=payload.estado.strip() if payload.estado else None,
+        ciudad=payload.ciudad.strip() if payload.ciudad else None,
+        especificacion=payload.especificacion.strip() if payload.especificacion else None,
+        facturacion=payload.facturacion or (1 if payload.rfc or payload.rsocial else 0),
+        constancia_situacion_fiscal=payload.constancia_situacion_fiscal,
         eliminado=0,
         transferido=0,
         usuario_registro=current_user.id,
@@ -344,6 +366,24 @@ def create_cliente(
     db.add(nuevo_cliente)
     db.commit()
     db.refresh(nuevo_cliente)
+
+    # Crear acceso a portal en tabla login si tiene correo
+    if correo_clean:
+        raw_pass = (payload.contrasena or "").strip()
+        if not raw_pass:
+            raw_pass = f"Nexus{nuevo_cliente.id}*"
+        md5_pass = hashlib.md5(raw_pass.encode()).hexdigest()
+
+        login_record = Login(
+            id=nuevo_cliente.id,
+            usuario=correo_clean,
+            contrasena=md5_pass,
+            contrasena_normal=raw_pass,
+            id_tipo_usuario=0,
+            cambio_contrasena=0,
+        )
+        db.add(login_record)
+        db.commit()
 
     return get_cliente_detail(nuevo_cliente.id, current_user, db)
 

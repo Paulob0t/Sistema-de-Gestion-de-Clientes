@@ -19,11 +19,16 @@ class ClienteBase(BaseModel):
     estado: Optional[str] = None
     ciudad: Optional[str] = None
     especificacion: Optional[str] = None
+    facturacion: Optional[int] = 0
+    constancia_situacion_fiscal: Optional[str] = None
+    contrasena: Optional[str] = None
 
 
 class ClienteCreate(ClienteBase):
     empresa: str = Field(..., min_length=1, description="Nombre de la empresa o negocio")
     nombre_contacto: str = Field(..., min_length=1, description="Nombre de la persona de contacto")
+    correo: Optional[str] = None
+    contrasena: Optional[str] = None
 
 
 class ClienteUpdate(ClienteBase):
