@@ -209,10 +209,15 @@ function handleLogout() {
                 <span class="truncate">Consulta de Dominios</span>
               </button>
               <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                @click="handleNavigation('/hostings')"
+                :class="[
+                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                  route.path.startsWith('/hosting')
+                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                ]"
               >
-                <i class="pi pi-server text-slate-500 text-xs"></i>
+                <i class="pi pi-server text-xs" :class="route.path.startsWith('/hosting') ? 'text-blue-400' : 'text-slate-500'"></i>
                 <span class="truncate">Consulta de Hosting</span>
               </button>
               <button

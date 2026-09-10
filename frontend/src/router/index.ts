@@ -31,6 +31,16 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/hostings',
+    name: 'hostings',
+    component: () => import('@/views/HostingsView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/hosting',
+    redirect: '/hostings'
+  },
+  {
     path: '/portal/clientes',
     name: 'portal-clientes',
     component: () => import('@/views/DashboardView.vue'),
