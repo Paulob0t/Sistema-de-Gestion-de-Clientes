@@ -2,7 +2,7 @@ from datetime import datetime, date, timedelta
 from typing import Optional, List
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_, and_, desc, asc
+from sqlalchemy import func, or_, and_, desc, asc, cast, String
 
 from app.core.database import get_db
 from app.api.v1.endpoints.auth import get_current_user
@@ -85,7 +85,7 @@ def list_dominios(
                 Cliente.empresa.ilike(term),
                 Cliente.nombre_contacto.ilike(term),
                 Cliente.correo.ilike(term),
-                func.cast(Dominio.id_dominio, func.CHAR).ilike(term),
+                cast(Dominio.id_dominio, String).ilike(term),
             )
         )
 

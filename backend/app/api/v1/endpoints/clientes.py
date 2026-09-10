@@ -2,7 +2,7 @@ from datetime import datetime, date, timedelta
 from typing import Optional, List
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_, and_, desc, asc
+from sqlalchemy import func, or_, and_, desc, asc, cast, String
 
 from app.core.database import get_db
 from app.api.v1.endpoints.auth import get_current_user
@@ -97,7 +97,7 @@ def list_clientes(
                 Cliente.correo.ilike(term),
                 Cliente.telefono.ilike(term),
                 Cliente.rfc.ilike(term),
-                func.cast(Cliente.id, func.CHAR).ilike(term),
+                cast(Cliente.id, String).ilike(term),
             )
         )
 

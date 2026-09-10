@@ -2,7 +2,7 @@ from datetime import datetime, date, time, timedelta
 from typing import Optional, List
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_, and_, desc, asc
+from sqlalchemy import func, or_, and_, desc, asc, cast, String
 
 from app.core.database import get_db
 from app.api.v1.endpoints.auth import get_current_user
@@ -119,8 +119,8 @@ def list_pagos(
                 Cliente.correo.ilike(term),
                 Hosting.nom_host.ilike(term),
                 Dominio.url_dominio.ilike(term),
-                func.cast(Pago.id, func.CHAR).ilike(term),
-                func.cast(Pago.monto, func.CHAR).ilike(term),
+                cast(Pago.id, String).ilike(term),
+                cast(Pago.monto, String).ilike(term),
             )
         )
 
