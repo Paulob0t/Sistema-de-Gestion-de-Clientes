@@ -273,10 +273,15 @@ function handleLogout() {
                 <span class="truncate">Nuevo Cliente</span>
               </button>
               <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                @click="handleNavigation('/dominios/nuevo')"
+                :class="[
+                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                  route.path === '/dominios/nuevo'
+                    ? 'bg-cyan-600/15 text-cyan-400 font-bold border-l-2 border-cyan-500'
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                ]"
               >
-                <i class="pi pi-link text-slate-500 text-xs"></i>
+                <i class="pi pi-link text-xs" :class="route.path === '/dominios/nuevo' ? 'text-cyan-400' : 'text-slate-500'"></i>
                 <span class="truncate">Asignar Dominio</span>
               </button>
               <button

@@ -56,7 +56,11 @@ export interface DominioDetail {
   ns2: string | null
   ns3: string | null
   ns4: string | null
+  ns5?: string | null
+  ns6?: string | null
   costo_dominio: number
+  id_forma_pago?: number
+  frecuencia_pago?: number
   fecha_contratacion: string | null
   fecha_pago: string | null
   dias_restantes: number | null
@@ -72,16 +76,21 @@ export interface DominioPayload {
   url_dominio: string
   proveedor?: string | null
   costo_dominio?: number
+  id_forma_pago?: number
+  frecuencia_pago?: number
   fecha_contratacion?: string | null
   fecha_pago?: string | null
   url_admin?: string | null
   usuario?: string | null
+  contrasena?: string | null
   contrasena_normal?: string | null
   url_cpanel?: string | null
   ns1?: string | null
   ns2?: string | null
   ns3?: string | null
   ns4?: string | null
+  ns5?: string | null
+  ns6?: string | null
   estado_dominio?: number
   registrado?: number
   estatus_pago?: number

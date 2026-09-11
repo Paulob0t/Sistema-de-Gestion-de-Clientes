@@ -156,6 +156,7 @@ def list_clientes(
                 total_hostings=host_count,
                 total_pagos_pendientes=pagos_count,
                 estado_pago=estado_pago,
+                facturacion=cliente.facturacion or 0,
             )
         )
 

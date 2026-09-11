@@ -16,7 +16,11 @@ class DominioBase(BaseModel):
     ns2: Optional[str] = None
     ns3: Optional[str] = None
     ns4: Optional[str] = None
+    ns5: Optional[str] = None
+    ns6: Optional[str] = None
     costo_dominio: Optional[float] = 0.0
+    id_forma_pago: Optional[int] = 1  # 1: MXN, 2: USD
+    frecuencia_pago: Optional[int] = 3  # 3: Anual
     fecha_contratacion: Optional[str] = None
     fecha_pago: Optional[str] = None
     estado_dominio: Optional[int] = 1
@@ -41,7 +45,11 @@ class DominioUpdate(BaseModel):
     ns2: Optional[str] = None
     ns3: Optional[str] = None
     ns4: Optional[str] = None
+    ns5: Optional[str] = None
+    ns6: Optional[str] = None
     costo_dominio: Optional[float] = None
+    id_forma_pago: Optional[int] = None
+    frecuencia_pago: Optional[int] = None
     fecha_contratacion: Optional[str] = None
     fecha_pago: Optional[str] = None
     estado_dominio: Optional[int] = None
@@ -60,6 +68,7 @@ class DominioListItem(BaseModel):
     cliente_telefono: Optional[str] = None
     proveedor: Optional[str] = None
     costo_dominio: float = 0.0
+    id_forma_pago: Optional[int] = 1
     fecha_contratacion: Optional[str] = None
     fecha_pago: Optional[str] = None
     dias_restantes: Optional[int] = None
@@ -109,7 +118,11 @@ class DominioDetail(BaseModel):
     ns2: Optional[str] = None
     ns3: Optional[str] = None
     ns4: Optional[str] = None
+    ns5: Optional[str] = None
+    ns6: Optional[str] = None
     costo_dominio: float = 0.0
+    id_forma_pago: Optional[int] = 1
+    frecuencia_pago: Optional[int] = 3
     fecha_contratacion: Optional[str] = None
     fecha_pago: Optional[str] = None
     dias_restantes: Optional[int] = None

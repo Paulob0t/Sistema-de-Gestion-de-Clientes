@@ -235,7 +235,11 @@ def get_dominio_detail(
         ns2=dom.ns2,
         ns3=dom.ns3,
         ns4=dom.ns4,
+        ns5=dom.ns5,
+        ns6=dom.ns6,
         costo_dominio=float(dom.costo_dominio or 0.0),
+        id_forma_pago=dom.id_forma_pago or 1,
+        frecuencia_pago=dom.frecuencia_pago or 3,
         fecha_contratacion=str(dom.fecha_contratacion) if dom.fecha_contratacion else None,
         fecha_pago=v_info["str"],
         dias_restantes=v_info["dias"],
@@ -253,7 +257,25 @@ def create_dominio(
     current_user: UserProfile = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    fecha_c = None
+    if current_user.id_tipo_usuario == 0:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Solo administradores pueden registrar nuevos dominios",
+        )
+
+    # Validar existencia del cliente
+    cliente = db.query(Cliente).filter(Cliente.id == payload.cliente_id, Cliente.eliminado == 0).first()
+    if not cliente:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El cliente seleccionado no existe o está inactivo",
+        )
+
+    # Limpieza de URL de dominio
+    clean_domain = payload.url_dominio.strip().lower()
+    clean_domain = clean_domain.replace("https://", "").replace("http://", "").rstrip("/")
+
+    fecha_c = date.today()
     if payload.fecha_contratacion:
         try:
             fecha_c = datetime.strptime(payload.fecha_contratacion, "%Y-%m-%d").date()
@@ -266,23 +288,39 @@ def create_dominio(
             fecha_p = datetime.strptime(payload.fecha_pago, "%Y-%m-%d").date()
         except Exception:
             pass
+    if not fecha_p:
+        try:
+            fecha_p = fecha_c.replace(year=fecha_c.year + 1)
+        except ValueError:
+            # Caso año bisiesto (29 de Feb)
+            fecha_p = fecha_c + timedelta(days=365)
+
+    # URLs por defecto
+    url_admin_val = payload.url_admin.strip() if payload.url_admin else f"https://{clean_domain}/wp-login.php"
+    url_cpanel_val = payload.url_cpanel.strip() if payload.url_cpanel else f"https://cpanel.{clean_domain}:2083/"
+
+    raw_pass = payload.contrasena_normal or payload.contrasena
 
     nuevo = Dominio(
         cliente_id=payload.cliente_id,
-        url_dominio=payload.url_dominio,
-        proveedor=payload.proveedor or "NexusBot",
+        url_dominio=clean_domain,
+        proveedor=payload.proveedor.strip() if payload.proveedor else "NexusBot",
         url_pago=payload.url_pago,
-        url_admin=payload.url_admin,
-        usuario=payload.usuario,
-        contrasena_normal=payload.contrasena_normal or payload.contrasena,
-        contrasena=payload.contrasena,
-        url_cpanel=payload.url_cpanel,
-        ns1=payload.ns1,
-        ns2=payload.ns2,
-        ns3=payload.ns3,
-        ns4=payload.ns4,
+        url_admin=url_admin_val,
+        usuario=payload.usuario.strip() if payload.usuario else None,
+        contrasena_normal=raw_pass.strip() if raw_pass else None,
+        contrasena=raw_pass.strip() if raw_pass else None,
+        url_cpanel=url_cpanel_val,
+        ns1=payload.ns1.strip() if payload.ns1 else None,
+        ns2=payload.ns2.strip() if payload.ns2 else None,
+        ns3=payload.ns3.strip() if payload.ns3 else None,
+        ns4=payload.ns4.strip() if payload.ns4 else None,
+        ns5=payload.ns5.strip() if payload.ns5 else None,
+        ns6=payload.ns6.strip() if payload.ns6 else None,
         costo_dominio=payload.costo_dominio or 0.0,
-        fecha_contratacion=fecha_c or date.today(),
+        id_forma_pago=payload.id_forma_pago or 1,
+        frecuencia_pago=payload.frecuencia_pago or 3,
+        fecha_contratacion=fecha_c,
         fecha_pago=fecha_p,
         estado_dominio=payload.estado_dominio if payload.estado_dominio is not None else 1,
         registrado=payload.registrado if payload.registrado is not None else 1,

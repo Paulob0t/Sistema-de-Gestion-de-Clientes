@@ -94,22 +94,7 @@ async function openDetail(id: number) {
 }
 
 function openCreate() {
-  isEditing.value = false
-  editingDominioId.value = null
-  formData.value = {
-    cliente_id: clientesList.value.length > 0 ? clientesList.value[0].id : 0,
-    url_dominio: '',
-    proveedor: 'NexusBot',
-    costo_dominio: 550.0,
-    fecha_contratacion: new Date().toISOString().split('T')[0],
-    fecha_pago: '',
-    ns1: 'ns1.nexusbot.io',
-    ns2: 'ns2.nexusbot.io',
-    estado_dominio: 1,
-    registrado: 1,
-    estatus_pago: 0,
-  }
-  isFormOpen.value = true
+  router.push('/dominios/nuevo')
 }
 
 async function openEdit(dom: DominioListItem | DominioDetail) {
@@ -230,7 +215,7 @@ onMounted(() => {
               class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-500/20 flex items-center space-x-1.5 transition-all duration-200 active:scale-95"
             >
               <i class="pi pi-plus text-xs"></i>
-              <span>Nuevo Dominio</span>
+              <span>Asignar Dominio</span>
             </button>
 
             <!-- Perfil / Logout en Header -->

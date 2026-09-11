@@ -15,6 +15,7 @@ export interface ClienteListItem {
   total_hostings: number
   total_pagos_pendientes: number
   estado_pago: 'al_dia' | 'pendiente' | 'sin_servicios'
+  facturacion?: number
 }
 
 export interface ClienteStats {

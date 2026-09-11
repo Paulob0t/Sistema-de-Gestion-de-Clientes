@@ -50,6 +50,7 @@ class ClienteListItem(BaseModel):
     total_hostings: int = 0
     total_pagos_pendientes: int = 0
     estado_pago: str = "sin_servicios"  # "al_dia", "pendiente", "sin_servicios"
+    facturacion: Optional[int] = 0
 
     class Config:
         from_attributes = True

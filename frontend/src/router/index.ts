@@ -41,6 +41,16 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/dominios/nuevo',
+    name: 'nuevo-dominio',
+    component: () => import('@/views/NuevoDominioView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/asignar-dominio',
+    redirect: '/dominios/nuevo'
+  },
+  {
     path: '/hostings',
     name: 'hostings',
     component: () => import('@/views/HostingsView.vue'),

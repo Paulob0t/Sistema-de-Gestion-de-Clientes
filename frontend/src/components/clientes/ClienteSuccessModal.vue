@@ -75,7 +75,7 @@ function sendWelcomeWhatsApp() {
               <span>Enviar WhatsApp</span>
             </button>
             <button
-              @click="router.push('/dominios')"
+              @click="router.push(`/dominios/nuevo?cliente_id=${client.id}`)"
               class="p-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20 font-bold flex items-center space-x-2 transition-colors"
             >
               <i class="pi pi-globe text-sm"></i>
