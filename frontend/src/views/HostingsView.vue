@@ -100,30 +100,7 @@ async function openDetail(id: number) {
 }
 
 function openCreate() {
-  isEditing.value = false
-  editingHostingId.value = null
-  formData.value = {
-    cliente_id: clientesList.value.length > 0 ? clientesList.value[0].id : 0,
-    nom_host: '',
-    dominio: '',
-    usuario: '',
-    contrasena_normal: '',
-    tipo_producto: 'Servicio de alojamiento',
-    producto: 1,
-    costo_producto: 1500.0,
-    id_forma_pago: 1,
-    dns: '',
-    url_pago: '',
-    url_acceso: '',
-    ns1: 'ns1.nexusbot.io',
-    ns2: 'ns2.nexusbot.io',
-    fecha_contratacion: new Date().toISOString().split('T')[0],
-    fecha_pago: '',
-    estado_producto: 1,
-    IVA: 1,
-    frecuencia_pago: 2,
-  }
-  isFormOpen.value = true
+  router.push('/hostings/nuevo')
 }
 
 async function openEdit(host: HostingListItem | HostingDetail) {
@@ -232,10 +209,10 @@ onMounted(() => {
             <button
               v-if="isSuperAdmin"
               @click="openCreate"
-              class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-500/20 flex items-center space-x-1.5 transition-all duration-200 active:scale-95"
+              class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-bold shadow-lg shadow-amber-500/20 flex items-center space-x-1.5 transition-all duration-200 active:scale-95"
             >
               <i class="pi pi-plus text-xs"></i>
-              <span>Nuevo Hosting</span>
+              <span>Asignar Hosting</span>
             </button>
 
             <!-- Botón Salir / Logout -->

@@ -334,7 +334,7 @@ def create_hosting(
         )
 
     # Parse fechas
-    f_contratacion = None
+    f_contratacion = date.today()
     if payload.fecha_contratacion:
         try:
             f_contratacion = datetime.strptime(payload.fecha_contratacion, "%Y-%m-%d").date()
@@ -347,10 +347,30 @@ def create_hosting(
             f_pago = datetime.strptime(payload.fecha_pago, "%Y-%m-%d").date()
         except ValueError:
             pass
+    if not f_pago:
+        if payload.frecuencia_pago == 1:  # Mensual
+            try:
+                # Siguiente mes
+                mes = f_contratacion.month + 1
+                año = f_contratacion.year
+                if mes > 12:
+                    mes = 1
+                    año += 1
+                f_pago = f_contratacion.replace(year=año, month=mes)
+            except Exception:
+                f_pago = f_contratacion + timedelta(days=30)
+        else:  # Anual por defecto
+            try:
+                f_pago = f_contratacion.replace(year=f_contratacion.year + 1)
+            except Exception:
+                f_pago = f_contratacion + timedelta(days=365)
+
+    clean_host = payload.nom_host.strip()
+    url_acc = payload.url_acceso.strip() if payload.url_acceso else f"https://{clean_host}:2083/"
 
     nuevo_host = Hosting(
         cliente_id=payload.cliente_id,
-        nom_host=payload.nom_host.strip(),
+        nom_host=clean_host,
         dominio=payload.dominio.strip() if payload.dominio else "",
         usuario=payload.usuario.strip() if payload.usuario else "",
         contrasena_normal=payload.contrasena_normal or "",
@@ -361,7 +381,7 @@ def create_hosting(
         id_forma_pago=payload.id_forma_pago or 1,
         dns=payload.dns or "",
         url_pago=payload.url_pago or "",
-        url_acceso=payload.url_acceso or "",
+        url_acceso=url_acc,
         ns1=payload.ns1 or "",
         ns2=payload.ns2 or "",
         ns3=payload.ns3 or "",

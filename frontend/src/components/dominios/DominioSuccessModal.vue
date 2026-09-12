@@ -97,7 +97,7 @@ function sendDomainWhatsApp() {
               <span>Enviar WhatsApp</span>
             </button>
             <button
-              @click="router.push(`/hostings?cliente_id=${domain.cliente_id}`)"
+              @click="router.push(`/hostings/nuevo?cliente_id=${domain.cliente_id}&dominio=${encodeURIComponent(domain.url_dominio)}`)"
               class="p-3 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 font-bold flex items-center space-x-2 transition-colors"
             >
               <i class="pi pi-server text-sm"></i>

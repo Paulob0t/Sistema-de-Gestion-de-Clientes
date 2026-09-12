@@ -57,6 +57,16 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/hostings/nuevo',
+    name: 'nuevo-hosting',
+    component: () => import('@/views/NuevoHostingView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/asignar-hosting',
+    redirect: '/hostings/nuevo'
+  },
+  {
     path: '/hosting',
     redirect: '/hostings'
   },
