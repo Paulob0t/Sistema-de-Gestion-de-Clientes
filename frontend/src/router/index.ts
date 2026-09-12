@@ -77,6 +77,16 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/pagos/nuevo',
+    name: 'nuevo-pago',
+    component: () => import('@/views/NuevoPagoView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/registrar-pago',
+    redirect: '/pagos/nuevo'
+  },
+  {
     path: '/pago',
     redirect: '/pagos'
   },

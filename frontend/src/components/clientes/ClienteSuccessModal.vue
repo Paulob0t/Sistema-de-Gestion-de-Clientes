@@ -89,7 +89,7 @@ function sendWelcomeWhatsApp() {
               <span>Asignar Hosting</span>
             </button>
             <button
-              @click="router.push('/pagos')"
+              @click="router.push(`/pagos/nuevo?cliente_id=${client.id}`)"
               class="p-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 font-bold flex items-center space-x-2 transition-colors"
             >
               <i class="pi pi-credit-card text-sm"></i>

@@ -297,10 +297,15 @@ function handleLogout() {
                 <span class="truncate">Asignar Hosting</span>
               </button>
               <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                @click="handleNavigation('/pagos/nuevo')"
+                :class="[
+                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                  route.path === '/pagos/nuevo'
+                    ? 'bg-indigo-600/15 text-indigo-400 font-bold border-l-2 border-indigo-500'
+                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                ]"
               >
-                <i class="pi pi-dollar text-slate-500 text-xs"></i>
+                <i class="pi pi-dollar text-xs" :class="route.path === '/pagos/nuevo' ? 'text-indigo-400' : 'text-slate-500'"></i>
                 <span class="truncate">Registrar Pago</span>
               </button>
             </div>

@@ -100,7 +100,7 @@ function sendHostingWhatsApp() {
               <span>Enviar WhatsApp</span>
             </button>
             <button
-              @click="router.push(`/pagos?cliente_id=${hosting.cliente_id}`)"
+              @click="router.push(`/pagos/nuevo?cliente_id=${hosting.cliente_id}&tipo_servicio=1&id_servicio=${hosting.id_orden}&monto=${hosting.costo_producto}&concepto=${encodeURIComponent('Servicio de Hosting: ' + hosting.nom_host)}`)"
               class="p-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 font-bold flex items-center space-x-2 transition-colors"
             >
               <i class="pi pi-credit-card text-sm"></i>

@@ -104,7 +104,7 @@ function sendDomainWhatsApp() {
               <span>Asignar Hosting</span>
             </button>
             <button
-              @click="router.push(`/pagos?cliente_id=${domain.cliente_id}`)"
+              @click="router.push(`/pagos/nuevo?cliente_id=${domain.cliente_id}&tipo_servicio=2&id_servicio=${domain.id_dominio}&monto=${domain.costo_dominio}&concepto=${encodeURIComponent('Renovación de Dominio: ' + domain.url_dominio)}`)"
               class="p-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 font-bold flex items-center space-x-2 transition-colors"
             >
               <i class="pi pi-credit-card text-sm"></i>

@@ -97,24 +97,7 @@ async function openDetail(id: number) {
 }
 
 function openCreate() {
-  isEditing.value = false
-  editingPagoId.value = null
-  formData.value = {
-    id_clie: clientesList.value.length > 0 ? clientesList.value[0].id : 0,
-    monto: 1000.0,
-    currency: 'MXN',
-    concepto: '',
-    forma_pago: 1,
-    estatus: 0,
-    tipo_servicio: 0,
-    id_servicio: 0,
-    fecha: new Date().toISOString().split('T')[0],
-    fecha_limite_pago: '',
-    id_pago: '',
-    manual: 1,
-    frecuencia_pago: 0,
-  }
-  isFormOpen.value = true
+  router.push('/pagos/nuevo')
 }
 
 async function openEdit(pago: PagoListItem | PagoDetail) {
@@ -214,14 +197,14 @@ onMounted(() => {
           </div>
 
           <div class="flex items-center space-x-3">
-            <!-- Botón Nuevo Cobro -->
+            <!-- Botón Nuevo Cobro / Registrar Pago -->
             <button
               v-if="isSuperAdmin"
               @click="openCreate"
               class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-xs font-bold shadow-lg shadow-emerald-500/20 flex items-center space-x-1.5 transition-all duration-200 active:scale-95"
             >
               <i class="pi pi-plus text-xs"></i>
-              <span>Nuevo Cobro</span>
+              <span>Registrar Pago</span>
             </button>
 
             <!-- Botón Salir / Logout -->
