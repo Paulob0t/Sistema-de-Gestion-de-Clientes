@@ -38,14 +38,14 @@ class Settings(BaseSettings):
         "https://cliente.conlineweb.com",
     ]
 
-    # SMTP Mail Server
+    # SMTP Mail Server (Cargado exclusivamente desde .env)
     SMTP_HOST: str = "smtp.gmail.com"
     SMTP_PORT: int = 587
     SMTP_SECURE: str = "tls"
     SMTP_AUTH: bool = True
-    SMTP_USER: str = "servicios@conlineweb.com"
-    SMTP_PASS: str = "wcglkgcxfebsauqo"
-    SMTP_FROM_EMAIL: str = "servicios@conlineweb.com"
+    SMTP_USER: str = ""
+    SMTP_PASS: str = ""
+    SMTP_FROM_EMAIL: str = ""
     SMTP_FROM_NAME: str = "ConlineWeb CRM"
 
     model_config = SettingsConfigDict(
