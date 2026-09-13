@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
@@ -22,15 +22,47 @@ const isClient = computed(() => authStore.isCliente)
 // Estado colapsado / expandido adaptativo en escritorio
 const isCollapsed = ref(false)
 
-// Estados para módulos colapsables del menú
+// Estados para módulos colapsables del menú (todos colapsados por defecto en login / dashboard)
 const openModules = ref<Record<string, boolean>>({
-  consultas: true,
+  consultas: false,
   registros: false,
   comunicacion: false,
   soporte: false,
   analytics: false,
   seguridad: false,
 })
+
+// Auto-expandir el módulo correspondiente según la ruta actual
+function syncActiveModules(path: string) {
+  if (
+    path === '/clientes/nuevo' ||
+    path === '/dominios/nuevo' ||
+    path === '/hostings/nuevo' ||
+    path === '/pagos/nuevo' ||
+    path === '/registrar-pago'
+  ) {
+    openModules.value.registros = true
+  } else if (
+    path === '/clientes' ||
+    path === '/dominios' ||
+    path === '/hostings' ||
+    path === '/pagos' ||
+    (path.startsWith('/clientes/') && !path.includes('/nuevo')) ||
+    (path.startsWith('/dominios/') && !path.includes('/nuevo')) ||
+    (path.startsWith('/hostings/') && !path.includes('/nuevo')) ||
+    (path.startsWith('/pagos/') && !path.includes('/nuevo'))
+  ) {
+    openModules.value.consultas = true
+  }
+}
+
+watch(
+  () => route.path,
+  (newPath) => {
+    syncActiveModules(newPath)
+  },
+  { immediate: true }
+)
 
 function toggleModule(modKey: string) {
   if (isCollapsed.value) {
@@ -150,7 +182,7 @@ function handleLogout() {
             :class="[
               'w-full flex items-center rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-900 hover:text-white transition-colors',
               isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
-              route.path.startsWith('/pago') ? 'bg-blue-600/15 text-blue-400 font-bold' : ''
+              route.path === '/pagos' ? 'bg-blue-600/15 text-blue-400 font-bold' : ''
             ]"
             :title="isCollapsed ? 'Mis Pagos & Facturas' : undefined"
           >
@@ -179,61 +211,70 @@ function handleLogout() {
               </div>
               <i
                 v-show="!isCollapsed"
-                class="pi pi-chevron-down text-[10px] transition-transform duration-150 text-slate-500 group-hover:text-slate-300"
+                class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.consultas }"
               ></i>
             </button>
 
-            <div v-show="openModules.consultas && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
-              <button
-                @click="handleNavigation('/clientes')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path === '/clientes'
-                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-building text-xs" :class="route.path === '/clientes' ? 'text-blue-400' : 'text-slate-500'"></i>
-                <span class="truncate">Consulta de Clientes</span>
-              </button>
-              <button
-                @click="handleNavigation('/dominios')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path === '/dominios'
-                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-globe text-xs" :class="route.path === '/dominios' ? 'text-blue-400' : 'text-slate-500'"></i>
-                <span class="truncate">Consulta de Dominios</span>
-              </button>
-              <button
-                @click="handleNavigation('/hostings')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path.startsWith('/hosting')
-                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-server text-xs" :class="route.path.startsWith('/hosting') ? 'text-blue-400' : 'text-slate-500'"></i>
-                <span class="truncate">Consulta de Hosting</span>
-              </button>
-              <button
-                @click="handleNavigation('/pagos')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path.startsWith('/pago')
-                    ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-credit-card text-xs" :class="route.path.startsWith('/pago') ? 'text-blue-400' : 'text-slate-500'"></i>
-                <span class="truncate">Consulta de Pagos</span>
-              </button>
-            </div>
+            <transition
+              enter-active-class="transition-all duration-200 ease-out"
+              enter-from-class="opacity-0 -translate-y-1"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition-all duration-150 ease-in"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 -translate-y-1"
+            >
+              <div v-show="openModules.consultas && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
+                <button
+                  @click="handleNavigation('/clientes')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/clientes'
+                      ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-building text-xs" :class="route.path === '/clientes' ? 'text-blue-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Consulta de Clientes</span>
+                </button>
+                <button
+                  @click="handleNavigation('/dominios')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/dominios'
+                      ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-globe text-xs" :class="route.path === '/dominios' ? 'text-blue-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Consulta de Dominios</span>
+                </button>
+                <button
+                  @click="handleNavigation('/hostings')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/hostings'
+                      ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-server text-xs" :class="route.path === '/hostings' ? 'text-blue-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Consulta de Hosting</span>
+                </button>
+                <button
+                  @click="handleNavigation('/pagos')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/pagos'
+                      ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-credit-card text-xs" :class="route.path === '/pagos' ? 'text-blue-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Consulta de Pagos</span>
+                </button>
+              </div>
+            </transition>
           </div>
 
           <!-- 2. MÓDULO: REGISTROS -->
@@ -254,61 +295,70 @@ function handleLogout() {
               </div>
               <i
                 v-show="!isCollapsed"
-                class="pi pi-chevron-down text-[10px] transition-transform duration-150 text-slate-500 group-hover:text-slate-300"
+                class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.registros }"
               ></i>
             </button>
 
-            <div v-show="openModules.registros && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
-              <button
-                @click="handleNavigation('/clientes/nuevo')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path === '/clientes/nuevo'
-                    ? 'bg-emerald-600/15 text-emerald-400 font-bold border-l-2 border-emerald-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-user-plus text-xs" :class="route.path === '/clientes/nuevo' ? 'text-emerald-400' : 'text-slate-500'"></i>
-                <span class="truncate">Nuevo Cliente</span>
-              </button>
-              <button
-                @click="handleNavigation('/dominios/nuevo')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path === '/dominios/nuevo'
-                    ? 'bg-cyan-600/15 text-cyan-400 font-bold border-l-2 border-cyan-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-link text-xs" :class="route.path === '/dominios/nuevo' ? 'text-cyan-400' : 'text-slate-500'"></i>
-                <span class="truncate">Asignar Dominio</span>
-              </button>
-              <button
-                @click="handleNavigation('/hostings/nuevo')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path === '/hostings/nuevo'
-                    ? 'bg-amber-600/15 text-amber-400 font-bold border-l-2 border-amber-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-database text-xs" :class="route.path === '/hostings/nuevo' ? 'text-amber-400' : 'text-slate-500'"></i>
-                <span class="truncate">Asignar Hosting</span>
-              </button>
-              <button
-                @click="handleNavigation('/pagos/nuevo')"
-                :class="[
-                  'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
-                  route.path === '/pagos/nuevo'
-                    ? 'bg-indigo-600/15 text-indigo-400 font-bold border-l-2 border-indigo-500'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
-                ]"
-              >
-                <i class="pi pi-dollar text-xs" :class="route.path === '/pagos/nuevo' ? 'text-indigo-400' : 'text-slate-500'"></i>
-                <span class="truncate">Registrar Pago</span>
-              </button>
-            </div>
+            <transition
+              enter-active-class="transition-all duration-200 ease-out"
+              enter-from-class="opacity-0 -translate-y-1"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition-all duration-150 ease-in"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 -translate-y-1"
+            >
+              <div v-show="openModules.registros && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
+                <button
+                  @click="handleNavigation('/clientes/nuevo')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/clientes/nuevo'
+                      ? 'bg-emerald-600/15 text-emerald-400 font-bold border-l-2 border-emerald-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-user-plus text-xs" :class="route.path === '/clientes/nuevo' ? 'text-emerald-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Nuevo Cliente</span>
+                </button>
+                <button
+                  @click="handleNavigation('/dominios/nuevo')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/dominios/nuevo'
+                      ? 'bg-cyan-600/15 text-cyan-400 font-bold border-l-2 border-cyan-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-link text-xs" :class="route.path === '/dominios/nuevo' ? 'text-cyan-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Asignar Dominio</span>
+                </button>
+                <button
+                  @click="handleNavigation('/hostings/nuevo')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/hostings/nuevo'
+                      ? 'bg-amber-600/15 text-amber-400 font-bold border-l-2 border-amber-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-database text-xs" :class="route.path === '/hostings/nuevo' ? 'text-amber-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Asignar Hosting</span>
+                </button>
+                <button
+                  @click="handleNavigation('/pagos/nuevo')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/pagos/nuevo' || route.path === '/registrar-pago'
+                      ? 'bg-indigo-600/15 text-indigo-400 font-bold border-l-2 border-indigo-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
+                >
+                  <i class="pi pi-dollar text-xs" :class="route.path === '/pagos/nuevo' || route.path === '/registrar-pago' ? 'text-indigo-400' : 'text-slate-500'"></i>
+                  <span class="truncate">Registrar Pago</span>
+                </button>
+              </div>
+            </transition>
           </div>
 
           <!-- 3. MÓDULO: COMUNICACIÓN & CRM -->
@@ -329,27 +379,36 @@ function handleLogout() {
               </div>
               <i
                 v-show="!isCollapsed"
-                class="pi pi-chevron-down text-[10px] transition-transform duration-150 text-slate-500 group-hover:text-slate-300"
+                class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.comunicacion }"
               ></i>
             </button>
 
-            <div v-show="openModules.comunicacion && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
-              >
-                <i class="pi pi-envelope text-slate-500 text-xs"></i>
-                <span class="truncate">Recordatorios Correo</span>
-              </button>
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
-              >
-                <i class="pi pi-whatsapp text-slate-500 text-xs"></i>
-                <span class="truncate">WhatsApp CRM Web</span>
-              </button>
-            </div>
+            <transition
+              enter-active-class="transition-all duration-200 ease-out"
+              enter-from-class="opacity-0 -translate-y-1"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition-all duration-150 ease-in"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 -translate-y-1"
+            >
+              <div v-show="openModules.comunicacion && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
+                <button
+                  @click="handleNavigation('/dashboard')"
+                  class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                >
+                  <i class="pi pi-envelope text-slate-500 text-xs"></i>
+                  <span class="truncate">Recordatorios Correo</span>
+                </button>
+                <button
+                  @click="handleNavigation('/dashboard')"
+                  class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                >
+                  <i class="pi pi-whatsapp text-slate-500 text-xs"></i>
+                  <span class="truncate">WhatsApp CRM Web</span>
+                </button>
+              </div>
+            </transition>
           </div>
 
           <!-- 4. MÓDULO: ANALÍTICA & REPORTES -->
@@ -370,27 +429,36 @@ function handleLogout() {
               </div>
               <i
                 v-show="!isCollapsed"
-                class="pi pi-chevron-down text-[10px] transition-transform duration-150 text-slate-500 group-hover:text-slate-300"
+                class="pi pi-chevron-down text-[10px] transition-transform duration-200 text-slate-500 group-hover:text-slate-300"
                 :class="{ '-rotate-90': !openModules.analytics }"
               ></i>
             </button>
 
-            <div v-show="openModules.analytics && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
-              >
-                <i class="pi pi-chart-line text-slate-500 text-xs"></i>
-                <span class="truncate">Reporte de Ingresos</span>
-              </button>
-              <button
-                @click="handleNavigation('/dashboard')"
-                class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
-              >
-                <i class="pi pi-calendar-times text-slate-500 text-xs"></i>
-                <span class="truncate">Vencimientos Próximos</span>
-              </button>
-            </div>
+            <transition
+              enter-active-class="transition-all duration-200 ease-out"
+              enter-from-class="opacity-0 -translate-y-1"
+              enter-to-class="opacity-100 translate-y-0"
+              leave-active-class="transition-all duration-150 ease-in"
+              leave-from-class="opacity-100 translate-y-0"
+              leave-to-class="opacity-0 -translate-y-1"
+            >
+              <div v-show="openModules.analytics && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
+                <button
+                  @click="handleNavigation('/dashboard')"
+                  class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                >
+                  <i class="pi pi-chart-line text-slate-500 text-xs"></i>
+                  <span class="truncate">Reporte de Ingresos</span>
+                </button>
+                <button
+                  @click="handleNavigation('/dashboard')"
+                  class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                >
+                  <i class="pi pi-calendar-times text-slate-500 text-xs"></i>
+                  <span class="truncate">Vencimientos Próximos</span>
+                </button>
+              </div>
+            </transition>
           </div>
         </template>
       </div>
