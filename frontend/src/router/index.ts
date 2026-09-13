@@ -91,6 +91,16 @@ const routes = [
     redirect: '/pagos'
   },
   {
+    path: '/recordatorios',
+    name: 'recordatorios',
+    component: () => import('@/views/RecordatoriosView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/comunicacion/recordatorios',
+    redirect: '/recordatorios'
+  },
+  {
     path: '/portal/clientes',
     name: 'portal-clientes',
     component: () => import('@/views/DashboardView.vue'),

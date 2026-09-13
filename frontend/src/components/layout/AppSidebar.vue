@@ -53,6 +53,8 @@ function syncActiveModules(path: string) {
     (path.startsWith('/pagos/') && !path.includes('/nuevo'))
   ) {
     openModules.value.consultas = true
+  } else if (path === '/recordatorios' || path.startsWith('/comunicacion')) {
+    openModules.value.comunicacion = true
   }
 }
 
@@ -394,10 +396,15 @@ function handleLogout() {
             >
               <div v-show="openModules.comunicacion && !isCollapsed" class="space-y-0.5 pl-3 pt-0.5 border-l border-slate-800/80 ml-4">
                 <button
-                  @click="handleNavigation('/dashboard')"
-                  class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs text-slate-400 hover:bg-slate-900 hover:text-white transition-colors"
+                  @click="handleNavigation('/recordatorios')"
+                  :class="[
+                    'w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs transition-colors',
+                    route.path === '/recordatorios' || route.path.startsWith('/comunicacion')
+                      ? 'bg-cyan-600/15 text-cyan-400 font-bold border-l-2 border-cyan-500'
+                      : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                  ]"
                 >
-                  <i class="pi pi-envelope text-slate-500 text-xs"></i>
+                  <i class="pi pi-envelope text-xs" :class="route.path === '/recordatorios' ? 'text-cyan-400' : 'text-slate-500'"></i>
                   <span class="truncate">Recordatorios Correo</span>
                 </button>
                 <button
