@@ -101,6 +101,20 @@ const routes = [
     redirect: '/recordatorios'
   },
   {
+    path: '/solicitudes',
+    name: 'solicitudes',
+    component: () => import('@/views/SolicitudesView.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/solicitudes',
+    redirect: '/solicitudes'
+  },
+  {
+    path: '/admin/tickets',
+    redirect: '/solicitudes'
+  },
+  {
     path: '/portal/clientes',
     name: 'portal-clientes',
     component: () => import('@/views/DashboardView.vue'),
@@ -139,7 +153,15 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   if (to.meta.guestOnly && isAuth) {
+    if (authStore.isAgente) {
+      return next({ path: '/solicitudes' })
+    }
     return next({ path: '/dashboard' })
+  }
+
+  // Redirección directa al login o dashboard si el agente entra a la raíz
+  if (isAuth && authStore.isAgente && (to.path === '/' || to.path === '/dashboard')) {
+    return next({ path: '/solicitudes' })
   }
 
   next()

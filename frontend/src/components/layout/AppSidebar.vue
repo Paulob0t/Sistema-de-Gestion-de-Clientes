@@ -16,8 +16,9 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const user = computed(() => authStore.user)
-const isSuperAdmin = computed(() => authStore.isSuperAdmin || (user.value?.id_tipo_usuario ?? 0) >= 1)
-const isClient = computed(() => authStore.isCliente)
+const isSuperAdmin = computed(() => authStore.isSuperAdmin || (user.value?.id_tipo_usuario ?? 0) === 1 || (user.value?.id_tipo_usuario ?? 0) === 2)
+const isClient = computed(() => authStore.isCliente || (user.value?.id_tipo_usuario ?? 0) === 0)
+const isAgente = computed(() => authStore.isAgente || (user.value?.id_tipo_usuario ?? 0) === 3)
 
 // Estado colapsado / expandido adaptativo en escritorio
 const isCollapsed = ref(false)
@@ -26,6 +27,7 @@ const isCollapsed = ref(false)
 const openModules = ref<Record<string, boolean>>({
   consultas: false,
   registros: false,
+  solicitudes: false,
   comunicacion: false,
   soporte: false,
   analytics: false,
@@ -55,6 +57,8 @@ function syncActiveModules(path: string) {
     openModules.value.consultas = true
   } else if (path === '/recordatorios' || path.startsWith('/comunicacion')) {
     openModules.value.comunicacion = true
+  } else if (path === '/solicitudes' || path.startsWith('/solicitud')) {
+    openModules.value.solicitudes = true
   }
 }
 
@@ -163,6 +167,27 @@ function handleLogout() {
           </button>
         </div>
 
+        <!-- SECCIÓN: AGENTES / TICKETS (Solo si es Agente) -->
+        <div v-if="isAgente" class="space-y-1">
+          <div v-show="!isCollapsed" class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+            Operaciones
+          </div>
+          <button
+            @click="handleNavigation('/solicitudes')"
+            :class="[
+              'w-full flex items-center rounded-xl text-xs font-medium transition-colors',
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
+              route.path === '/solicitudes' || route.path.startsWith('/solicitud')
+                ? 'bg-blue-600/20 text-blue-400 font-bold border-l-2 border-blue-500'
+                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+            ]"
+            :title="isCollapsed ? 'Mis Solicitudes' : undefined"
+          >
+            <i class="pi pi-ticket text-sm text-blue-400 shrink-0"></i>
+            <span v-show="!isCollapsed" class="truncate">Mis Solicitudes</span>
+          </button>
+        </div>
+
         <!-- SECCIÓN: CLIENTES / PORTAL (Solo si es Cliente) -->
         <div v-if="isClient" class="space-y-1">
           <div v-show="!isCollapsed" class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -195,6 +220,23 @@ function handleLogout() {
 
         <!-- SECCIONES PARA ADMINISTRADORES / STAFF -->
         <template v-if="isSuperAdmin">
+          <!-- Solicitudes de Agentes (Acceso Directo Admin) -->
+          <div class="space-y-1">
+            <button
+              @click="handleNavigation('/solicitudes')"
+              :class="[
+                'w-full flex items-center rounded-xl text-xs font-medium transition-colors',
+                isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
+                route.path === '/solicitudes' || route.path.startsWith('/solicitud')
+                  ? 'bg-blue-600/20 text-blue-400 font-bold border-l-2 border-blue-500'
+                  : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+              ]"
+              :title="isCollapsed ? 'Solicitudes' : undefined"
+            >
+              <i class="pi pi-ticket text-sm text-blue-400 shrink-0"></i>
+              <span v-show="!isCollapsed" class="truncate">Solicitudes & Tickets</span>
+            </button>
+          </div>
           <!-- 1. MÓDULO: CONSULTAS (CRM Core) -->
           <div class="space-y-1">
             <button
