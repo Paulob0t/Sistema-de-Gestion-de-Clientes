@@ -12,12 +12,12 @@ ROLE_NAMES = {
 }
 
 ROLE_REDIRECTS = {
-    0: "/portal/clientes",
-    1: "/admin/dashboard",
-    2: "/admin/solicitudes",
-    3: "/admin/tickets",
-    4: "/admin/tickets-externa",
-    5: "/admin/leads"
+    0: "/dashboard",
+    1: "/dashboard",
+    2: "/solicitudes",
+    3: "/solicitudes",
+    4: "/solicitudes",
+    5: "/dashboard"
 }
 
 
