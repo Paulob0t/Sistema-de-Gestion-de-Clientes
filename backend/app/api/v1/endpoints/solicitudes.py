@@ -105,14 +105,37 @@ def _format_datetime(val: Optional[Any], fmt: str = "%Y-%m-%d %H:%M") -> Optiona
     return None
 
 
+def _format_date(val: Optional[Any], fmt: str = "%Y-%m-%d") -> Optional[str]:
+    """Formatea de manera segura una fecha a YYYY-MM-DD."""
+    if not val:
+        return None
+    if isinstance(val, (datetime, date)):
+        return val.strftime(fmt)
+    if isinstance(val, str):
+        v = val.strip()
+        if not v or v.startswith("0000-00-00") or v.lower() in ("none", "null"):
+            return None
+        if len(v) >= 10:
+            return v[:10]
+        return v
+    return None
+
+
 def _calculate_dias_restantes(due_val: Optional[Any]) -> Optional[int]:
     """Calcula días restantes hasta la fecha límite."""
     if not due_val:
         return None
     try:
-        due_date = due_val.date() if isinstance(due_val, datetime) else due_val
-        if isinstance(due_date, date):
-            return (due_date - date.today()).days
+        if isinstance(due_val, datetime):
+            return (due_val.date() - date.today()).days
+        if isinstance(due_val, date):
+            return (due_val - date.today()).days
+        if isinstance(due_val, str):
+            v = due_val.strip()
+            if not v or v.startswith("0000-00-00") or v.lower() in ("none", "null"):
+                return None
+            parsed = datetime.strptime(v[:10], "%Y-%m-%d").date()
+            return (parsed - date.today()).days
     except Exception:
         pass
     return None
