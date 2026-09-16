@@ -303,7 +303,7 @@ def list_solicitudes(
                 descripcion_texto=t_desc,
                 imagenes=imgs,
                 archivos=fls,
-                fecha_solicitud=sol.fecha_solicitud.strftime("%Y-%m-%d %H:%M") if sol.fecha_solicitud else None,
+                fecha_solicitud=_format_datetime(sol.fecha_solicitud),
                 estado=sol.estado,
                 usuario_asignado=sol.usuario_asignado,
                 agentes=agentes_list,
@@ -311,8 +311,8 @@ def list_solicitudes(
                 id_cliente=sol.id_cliente,
                 cliente_nombre=c_nom,
                 cliente_empresa=c_emp,
-                fecha_lim=sol.fecha_lim.strftime("%Y-%m-%d") if sol.fecha_lim else None,
-                fecha_termina=sol.fecha_termina.strftime("%Y-%m-%d %H:%M") if sol.fecha_termina else None,
+                fecha_lim=_format_date(sol.fecha_lim),
+                fecha_termina=_format_datetime(sol.fecha_termina),
                 dias_restantes=dias_rest,
                 total_notas=int(n_count),
             )
@@ -367,7 +367,7 @@ def get_solicitud(
                 autor=n.autor,
                 nota_texto=n_text,
                 imagenes=n_imgs,
-                fecha_creacion=n.fecha_creacion.strftime("%Y-%m-%d %H:%M") if n.fecha_creacion else None,
+                fecha_creacion=_format_datetime(n.fecha_creacion),
             )
         )
 
@@ -377,7 +377,7 @@ def get_solicitud(
         descripcion_texto=t_desc,
         imagenes=imgs,
         archivos=fls,
-        fecha_solicitud=sol.fecha_solicitud.strftime("%Y-%m-%d %H:%M") if sol.fecha_solicitud else None,
+        fecha_solicitud=_format_datetime(sol.fecha_solicitud),
         estado=sol.estado,
         usuario_asignado=sol.usuario_asignado,
         agentes=agentes_list,
@@ -385,8 +385,8 @@ def get_solicitud(
         id_cliente=sol.id_cliente,
         cliente_nombre=cliente.nombre_contacto if cliente else None,
         cliente_empresa=cliente.empresa if cliente else None,
-        fecha_lim=sol.fecha_lim.strftime("%Y-%m-%d") if sol.fecha_lim else None,
-        fecha_termina=sol.fecha_termina.strftime("%Y-%m-%d %H:%M") if sol.fecha_termina else None,
+        fecha_lim=_format_date(sol.fecha_lim),
+        fecha_termina=_format_datetime(sol.fecha_termina),
         dias_restantes=dias_rest,
         total_notas=len(notas_list),
         notas=notas_list,
@@ -581,5 +581,5 @@ def add_solicitud_nota(
         autor=nueva_nota.autor,
         nota_texto=payload.nota.strip(),
         imagenes=payload.imagenes or [],
-        fecha_creacion=nueva_nota.fecha_creacion.strftime("%Y-%m-%d %H:%M") if nueva_nota.fecha_creacion else None,
+        fecha_creacion=_format_datetime(nueva_nota.fecha_creacion),
     )
