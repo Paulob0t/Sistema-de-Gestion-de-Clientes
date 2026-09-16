@@ -4,7 +4,7 @@ from datetime import datetime, date
 from typing import Optional, List, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_, and_, desc, asc, cast, String
+from sqlalchemy import func, or_, and_, desc, asc, cast, String, case
 
 from app.core.database import get_db
 from app.api.v1.endpoints.auth import get_current_user
@@ -232,15 +232,16 @@ def list_solicitudes(
             )
         )
 
-    # Ordenamiento: Pendientes y En Proceso primero, luego por fecha descendente
+    # Ordenamiento: Pendientes y En Proceso primero, luego por id descendente
     query = query.order_by(
-        case=[
+        case(
             (Solicitud.estado == "En Proceso", 1),
             (Solicitud.estado == "Pendiente", 2),
             (Solicitud.estado == "Finalizado", 3),
-        ],
-        else_=4
-    ) if hasattr(func, "case") else query.order_by(Solicitud.id.desc())
+            else_=4,
+        ),
+        Solicitud.id.desc(),
+    )
 
     # Total general filtrado
     total_count = query.count()
