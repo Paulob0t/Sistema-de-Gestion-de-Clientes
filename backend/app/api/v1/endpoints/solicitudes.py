@@ -88,6 +88,23 @@ def _resolve_agentes(assigned_str: Optional[str], agentes_map: Dict[int, AgenteS
     return result
 
 
+def _format_datetime(val: Optional[Any], fmt: str = "%Y-%m-%d %H:%M") -> Optional[str]:
+    """Formatea de manera segura un datetime, date o string de base de datos."""
+    if not val:
+        return None
+    if isinstance(val, (datetime, date)):
+        return val.strftime(fmt)
+    if isinstance(val, str):
+        v = val.strip()
+        if not v or v.startswith("0000-00-00") or v.lower() in ("none", "null"):
+            return None
+        clean_v = v.replace("T", " ")
+        if len(clean_v) >= 16:
+            return clean_v[:16]
+        return clean_v
+    return None
+
+
 def _calculate_dias_restantes(due_val: Optional[Any]) -> Optional[int]:
     """Calcula días restantes hasta la fecha límite."""
     if not due_val:
