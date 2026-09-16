@@ -261,7 +261,7 @@ def list_solicitudes(
         )
 
     # Filtro por búsqueda de texto
-    if search:
+    if search and isinstance(search, str) and search.strip():
         s = f"%{search.strip()}%"
         query = query.filter(
             or_(
