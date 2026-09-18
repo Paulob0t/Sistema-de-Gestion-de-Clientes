@@ -12,7 +12,7 @@ ROLE_NAMES = {
 }
 
 ROLE_REDIRECTS = {
-    0: "/dashboard",
+    0: "/portal",
     1: "/dashboard",
     2: "/solicitudes",
     3: "/solicitudes",
