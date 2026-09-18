@@ -115,10 +115,18 @@ const routes = [
     redirect: '/solicitudes'
   },
   {
-    path: '/portal/clientes',
-    name: 'portal-clientes',
-    component: () => import('@/views/DashboardView.vue'),
+    path: '/portal',
+    name: 'portal-inicio',
+    component: () => import('@/views/portal/PortalInicioView.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/portal/inicio',
+    redirect: '/portal'
+  },
+  {
+    path: '/portal/clientes',
+    redirect: '/portal'
   },
   {
     path: '/admin/:pathMatch(.*)*',
@@ -153,13 +161,21 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   if (to.meta.guestOnly && isAuth) {
+    if (authStore.isCliente) {
+      return next({ path: '/portal' })
+    }
     if (authStore.isAgente) {
       return next({ path: '/solicitudes' })
     }
     return next({ path: '/dashboard' })
   }
 
-  // Redirección directa al login o dashboard si el agente entra a la raíz
+  // Redirección para Clientes al entrar a la raíz o al dashboard administrativo
+  if (isAuth && authStore.isCliente && (to.path === '/' || to.path === '/dashboard')) {
+    return next({ path: '/portal' })
+  }
+
+  // Redirección para Agentes al entrar a la raíz o al dashboard administrativo
   if (isAuth && authStore.isAgente && (to.path === '/' || to.path === '/dashboard')) {
     return next({ path: '/solicitudes' })
   }

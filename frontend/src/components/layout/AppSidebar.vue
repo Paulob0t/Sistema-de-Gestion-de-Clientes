@@ -191,18 +191,45 @@ function handleLogout() {
         <!-- SECCIÓN: CLIENTES / PORTAL (Solo si es Cliente) -->
         <div v-if="isClient" class="space-y-1">
           <div v-show="!isCollapsed" class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-            Mi Cuenta
+            Mi Portal
           </div>
           <button
-            @click="handleNavigation('/dashboard')"
+            @click="handleNavigation('/portal')"
+            :class="[
+              'w-full flex items-center rounded-xl text-xs font-medium transition-colors',
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
+              route.path === '/portal'
+                ? 'bg-blue-600/20 text-blue-400 font-bold border-l-2 border-blue-500'
+                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+            ]"
+            :title="isCollapsed ? 'Inicio Portal' : undefined"
+          >
+            <i class="pi pi-home text-sm text-blue-400 shrink-0"></i>
+            <span v-show="!isCollapsed" class="truncate">Inicio Portal</span>
+          </button>
+          <button
+            @click="handleNavigation('/dominios')"
             :class="[
               'w-full flex items-center rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-900 hover:text-white transition-colors',
-              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2'
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
+              route.path === '/dominios' ? 'bg-blue-600/15 text-blue-400 font-bold' : ''
             ]"
-            :title="isCollapsed ? 'Mis Dominios & Hosting' : undefined"
+            :title="isCollapsed ? 'Mis Sitios & Dominios' : undefined"
           >
             <i class="pi pi-globe text-sm text-cyan-400 shrink-0"></i>
-            <span v-show="!isCollapsed" class="truncate">Mis Dominios & Hosting</span>
+            <span v-show="!isCollapsed" class="truncate">Mis Sitios & Dominios</span>
+          </button>
+          <button
+            @click="handleNavigation('/hostings')"
+            :class="[
+              'w-full flex items-center rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-900 hover:text-white transition-colors',
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
+              route.path === '/hostings' ? 'bg-blue-600/15 text-blue-400 font-bold' : ''
+            ]"
+            :title="isCollapsed ? 'Mis Servicios de Hosting' : undefined"
+          >
+            <i class="pi pi-server text-sm text-indigo-400 shrink-0"></i>
+            <span v-show="!isCollapsed" class="truncate">Mis Servicios Hosting</span>
           </button>
           <button
             @click="handleNavigation('/pagos')"
@@ -215,6 +242,18 @@ function handleLogout() {
           >
             <i class="pi pi-credit-card text-sm text-emerald-400 shrink-0"></i>
             <span v-show="!isCollapsed" class="truncate">Mis Pagos & Facturas</span>
+          </button>
+          <button
+            @click="handleNavigation('/solicitudes')"
+            :class="[
+              'w-full flex items-center rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-900 hover:text-white transition-colors',
+              isCollapsed ? 'justify-center p-3' : 'space-x-3 px-3 py-2',
+              route.path === '/solicitudes' ? 'bg-blue-600/15 text-blue-400 font-bold' : ''
+            ]"
+            :title="isCollapsed ? 'Soporte & Tickets' : undefined"
+          >
+            <i class="pi pi-headphones text-sm text-purple-400 shrink-0"></i>
+            <span v-show="!isCollapsed" class="truncate">Soporte & Tickets</span>
           </button>
         </div>
 
