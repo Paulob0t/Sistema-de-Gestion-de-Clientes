@@ -291,13 +291,14 @@ onMounted(() => {
           <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs select-none">
             <button
               v-for="f in [
-                { id: 'activos', label: 'Dominios Activos' },
+                { id: 'todos', label: 'Todos', badge: stats.total },
+                { id: 'activos', label: 'Dominios Activos', badge: stats.activos },
                 { id: 'por_vencer', label: 'Próximos a Vencer (30d)', badge: stats.por_vencer_30d },
                 { id: 'vencidos', label: 'Vencidos', badge: stats.vencidos },
                 { id: 'pendientes_pago', label: 'Pendientes de Pago', badge: stats.pendientes_pago },
-                { id: 'pagados', label: 'Pagados' },
+                { id: 'pagados', label: 'Pagados', badge: stats.pagados },
                 { id: 'externos', label: 'Externos' },
-                { id: 'todos', label: 'Todos' },
+                { id: 'inactivos', label: 'Inactivos' },
               ]"
               :key="f.id"
               @click="setFilter(f.id)"
@@ -307,7 +308,7 @@ onMounted(() => {
               ]"
             >
               <span>{{ f.label }}</span>
-              <span v-if="f.badge && f.badge > 0" class="px-1.5 py-0.2 rounded-full bg-amber-950 text-[10px] text-amber-300 font-bold border border-amber-500/30">
+              <span v-if="f.badge !== undefined && f.badge > 0" class="px-1.5 py-0.2 rounded-full bg-slate-900 text-[10px] text-cyan-300 font-bold border border-cyan-500/30">
                 {{ f.badge }}
               </span>
             </button>

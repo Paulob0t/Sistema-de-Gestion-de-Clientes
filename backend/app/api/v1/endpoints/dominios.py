@@ -22,14 +22,22 @@ router = APIRouter()
 
 
 def calcular_vencimiento_dominio(fecha_pago_val, hoy: date):
-    if not fecha_pago_val or str(fecha_pago_val).startswith("0000-00-00"):
+    if not fecha_pago_val:
         return {"estado": "sin_fecha", "dias": None, "str": None}
     
+    val_str = str(fecha_pago_val).strip()
+    if val_str.startswith("0000-") or val_str.startswith("0001-") or val_str.lower() in ("none", "null", ""):
+        return {"estado": "sin_fecha", "dias": None, "str": None}
+
     try:
         if isinstance(fecha_pago_val, (date, datetime)):
+            if getattr(fecha_pago_val, "year", 2000) < 1900:
+                return {"estado": "sin_fecha", "dias": None, "str": None}
             fp = fecha_pago_val if isinstance(fecha_pago_val, date) else fecha_pago_val.date()
         else:
-            fp = datetime.strptime(str(fecha_pago_val), "%Y-%m-%d").date()
+            fp = datetime.strptime(val_str[:10], "%Y-%m-%d").date()
+            if fp.year < 1900:
+                return {"estado": "sin_fecha", "dias": None, "str": None}
         
         dias = (fp - hoy).days
         fp_str = fp.strftime("%Y-%m-%d")
@@ -43,13 +51,13 @@ def calcular_vencimiento_dominio(fecha_pago_val, hoy: date):
         else:
             return {"estado": "ok", "dias": dias, "str": fp_str}
     except Exception:
-        return {"estado": "sin_fecha", "dias": None, "str": str(fecha_pago_val)}
+        return {"estado": "sin_fecha", "dias": None, "str": None}
 
 
 @router.get("", response_model=DominiosListResponse, summary="Listar y consultar dominios con métricas")
 def list_dominios(
     search: Optional[str] = Query(None, description="Búsqueda por dominio, empresa, contacto o proveedor"),
-    filtro: str = Query("activos", description="Filtro: todos, activos, por_vencer, vencidos, pendientes_pago, pagados, externos, eliminados"),
+    filtro: str = Query("todos", description="Filtro: todos, activos, por_vencer, vencidos, pendientes_pago, pagados, externos, inactivos, eliminados"),
     sistema: str = Query("conlineweb", description="Sistema: conlineweb o hostingpro"),
     page: int = Query(1, ge=1, description="Número de página"),
     limit: int = Query(20, ge=1, le=100, description="Registros por página"),
@@ -90,40 +98,33 @@ def list_dominios(
         )
 
     # Filtros
-    if filtro == "activos":
-        base_query = base_query.filter(
-            Dominio.eliminado == 0,
-            Dominio.estado_dominio == 1
-        )
-    elif filtro == "por_vencer":
-        base_query = base_query.filter(
-            Dominio.eliminado == 0,
-            Dominio.fecha_pago >= hoy,
-            Dominio.fecha_pago <= limite_30_dias
-        )
-    elif filtro == "vencidos":
-        base_query = base_query.filter(
-            Dominio.eliminado == 0,
-            Dominio.fecha_pago < hoy,
-            Dominio.fecha_pago.isnot(None)
-        )
-    elif filtro == "pendientes_pago":
-        base_query = base_query.filter(
-            Dominio.eliminado == 0,
-            Dominio.estatus_pago == 0
-        )
-    elif filtro == "pagados":
-        base_query = base_query.filter(
-            Dominio.eliminado == 0,
-            Dominio.estatus_pago == 1
-        )
-    elif filtro == "externos":
-        base_query = base_query.filter(
-            Dominio.eliminado == 0,
-            Dominio.registrado == 0
-        )
-    elif filtro == "eliminados":
+    if filtro == "eliminados":
         base_query = base_query.filter(Dominio.eliminado == 1)
+    else:
+        base_query = base_query.filter(Dominio.eliminado == 0)
+
+        if filtro == "activos":
+            base_query = base_query.filter(Dominio.estado_dominio == 1)
+        elif filtro == "inactivos":
+            base_query = base_query.filter(Dominio.estado_dominio == 0)
+        elif filtro == "por_vencer":
+            base_query = base_query.filter(
+                Dominio.fecha_pago >= hoy,
+                Dominio.fecha_pago <= limite_30_dias,
+            )
+        elif filtro == "vencidos":
+            base_query = base_query.filter(
+                Dominio.fecha_pago < hoy,
+                Dominio.fecha_pago.isnot(None),
+                cast(Dominio.fecha_pago, String) != "0000-00-00",
+                cast(Dominio.fecha_pago, String) != "0001-01-01",
+            )
+        elif filtro == "pendientes_pago":
+            base_query = base_query.filter(Dominio.estatus_pago == 0)
+        elif filtro == "pagados":
+            base_query = base_query.filter(Dominio.estatus_pago == 1)
+        elif filtro == "externos":
+            base_query = base_query.filter(Dominio.registrado == 0)
 
     # Conteo total
     total_records = base_query.count()
@@ -156,28 +157,34 @@ def list_dominios(
                 fecha_pago=v_info["str"],
                 dias_restantes=v_info["dias"],
                 estado_vencimiento=v_info["estado"],
-                estado_dominio=dom.estado_dominio or 1,
+                estado_dominio=dom.estado_dominio or 0,
                 estatus_pago=dom.estatus_pago or 0,
                 registrado=dom.registrado or 0,
                 eliminado=dom.eliminado or 0,
             )
         )
 
-    # Calcular estadísticas globales
-    total_activos = db.query(func.count(Dominio.id_dominio)).filter(Dominio.eliminado == 0, Dominio.estado_dominio == 1).scalar() or 0
-    total_por_vencer = db.query(func.count(Dominio.id_dominio)).filter(
+    # Calcular estadísticas scoped al usuario actual
+    stats_base = db.query(Dominio)
+    if current_user.id_tipo_usuario == 0:
+        stats_base = stats_base.filter(Dominio.cliente_id == current_user.id)
+
+    total_all = stats_base.filter(Dominio.eliminado == 0).count()
+    total_activos = stats_base.filter(Dominio.eliminado == 0, Dominio.estado_dominio == 1).count()
+    total_por_vencer = stats_base.filter(
         Dominio.eliminado == 0,
         Dominio.fecha_pago >= hoy,
-        Dominio.fecha_pago <= limite_30_dias
-    ).scalar() or 0
-    total_vencidos = db.query(func.count(Dominio.id_dominio)).filter(
+        Dominio.fecha_pago <= limite_30_dias,
+    ).count()
+    total_vencidos = stats_base.filter(
         Dominio.eliminado == 0,
         Dominio.fecha_pago < hoy,
-        Dominio.fecha_pago.isnot(None)
-    ).scalar() or 0
-    total_pagados = db.query(func.count(Dominio.id_dominio)).filter(Dominio.eliminado == 0, Dominio.estatus_pago == 1).scalar() or 0
-    total_pendientes_pago = db.query(func.count(Dominio.id_dominio)).filter(Dominio.eliminado == 0, Dominio.estatus_pago == 0).scalar() or 0
-    total_all = db.query(func.count(Dominio.id_dominio)).scalar() or 0
+        Dominio.fecha_pago.isnot(None),
+        cast(Dominio.fecha_pago, String) != "0000-00-00",
+        cast(Dominio.fecha_pago, String) != "0001-01-01",
+    ).count()
+    total_pagados = stats_base.filter(Dominio.eliminado == 0, Dominio.estatus_pago == 1).count()
+    total_pendientes_pago = stats_base.filter(Dominio.eliminado == 0, Dominio.estatus_pago == 0).count()
 
     stats = DominioStats(
         total=total_all,

@@ -22,7 +22,7 @@ export function useDominios() {
   })
 
   const searchQuery = ref('')
-  const activeFilter = ref<string>('activos')
+  const activeFilter = ref<string>('todos')
   const currentSistema = ref<'conlineweb' | 'hostingpro'>('conlineweb')
   const currentPage = ref(1)
   const itemsPerPage = ref(20)
